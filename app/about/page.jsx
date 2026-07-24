@@ -15,7 +15,7 @@ export default function AboutPage() {
             
             <div className="space-y-6">
               <span className="text-xs font-bold text-luxe-rose uppercase tracking-widest px-3 py-1 bg-luxe-rose/10 rounded-full border border-luxe-rose/20">
-                THE LUXE STORY
+                VERSATILE BY VERSHA'
               </span>
               <h1 className="font-serif text-4xl sm:text-6xl font-extrabold text-gray-900 leading-tight">
                 Crafting Confidence, <br />
@@ -56,7 +56,7 @@ export default function AboutPage() {
           <span className="text-xs font-bold text-luxe-gold uppercase tracking-widest">
             OUR CORE PILLARS
           </span>
-          <h2 className="font-serif text-4xl font-bold text-gray-900">Why Queens Choose Versha</h2>
+          <h2 className="font-serif text-4xl font-bold text-gray-900">Why Queens Choose VERSATILE BY VERSHA'</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -99,7 +99,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2">
             <span className="text-xs font-bold text-luxe-rose uppercase tracking-widest">COMMUNITY</span>
-            <h2 className="font-serif text-4xl font-bold text-gray-900">The Luxe Sisterhood</h2>
+            <h2 className="font-serif text-4xl font-bold text-gray-900">The VERSATILE Sisterhood</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

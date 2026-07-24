@@ -31,9 +31,9 @@ export default function SignupPage() {
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-pink-100/80 space-y-6">
         
         <div className="text-center space-y-2">
-          <span className="font-serif text-3xl font-bold text-luxe-gold block">Versatile By Versha</span>
-          <h1 className="font-serif text-3xl font-extrabold text-gray-900">Create Account</h1>
-          <p className="text-xs text-gray-500">Join Luxe VIP for 15% off your first luxury order</p>
+          <span className="font-serif text-3xl font-bold text-luxe-gold block">VERSATILE BY VERSHA'</span>
+          <h1 className="font-serif text-3xl font-extrabold text-gray-900">Join The Sisterhood</h1>
+          <p className="text-xs text-gray-500">Create your account for exclusive VIP deals and 15% off your first order</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -92,7 +92,7 @@ export default function SignupPage() {
             ) : (
               <>
                 <UserPlus className="w-4 h-4" />
-                <span>Create Luxe Account</span>
+                <span>Create Your VERSATILE Account</span>
               </>
             )}
           </button>

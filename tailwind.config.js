@@ -4,6 +4,10 @@ module.exports = {
     "./app/**/*.{js,jsx}",
     "./components/**/*.{js,jsx}",
     "./context/**/*.{js,jsx}",
+    "./utils/**/*.{js,jsx}",
+    "./permissions/**/*.{js,jsx}",
+    "./hooks/**/*.{js,jsx}",
+    "./lib/**/*.{js,jsx}",
   ],
   theme: {
     extend: {

@@ -25,10 +25,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>Luxe Hair | Luxury Human Hair Wigs & Bundles</title>
+        <title>VERSATILE BY VERSHA' | One Woman. Every Look.</title>
         <meta
           name="description"
-          content="Shop 100% HD lace human hair wigs, body wave, deep wave, and luxury bundle deals. Crown your confidence with Luxe Hair."
+          content="Shop 100% HD Swiss lace human hair wigs, body wave, deep wave, and luxury bundle deals. VERSATILE BY VERSHA' — One Woman. Every Look."
         />
       </head>
       <body className="flex flex-col min-h-screen">

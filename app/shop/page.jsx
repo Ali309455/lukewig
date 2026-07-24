@@ -61,7 +61,7 @@ export default function ShopPage() {
       <section className="bg-gradient-to-r from-luxe-rose-light via-pink-100 to-amber-50 py-12 text-center border-b border-pink-100">
         <div className="max-w-4xl mx-auto px-4 space-y-3">
           <span className="text-xs font-bold text-luxe-rose uppercase tracking-widest">
-            VERSHAA's HUMAN HAIR COLLECTION
+            VERSATILE BY VERSHA' — ONE WOMAN. EVERY LOOK.
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-gray-900">
             Shop Luxury Wigs & Bundles

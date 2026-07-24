@@ -33,8 +33,8 @@ export default function HomePage() {
             {/* Left Copy */}
             <div className="space-y-6 text-center lg:text-left z-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-luxe-rose/10 text-luxe-rose text-xs font-bold tracking-widest uppercase border border-luxe-rose/20 shadow-sm">
-                <Sparkles className="w-4 h-4" />
-                <span>PREMIUM QUALITY UNMATCHED BEAUTY</span>
+                <Sparkles className="w-4 h-4 text-luxe-gold" />
+                <span>VERSATILE BY VERSHA' — ONE WOMAN. EVERY LOOK.</span>
               </div>
 
               <h1 className="font-serif text-5xl sm:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1]">
@@ -42,8 +42,8 @@ export default function HomePage() {
                 <span className="text-luxe-gold italic font-serif">Confidence</span>
               </h1>
 
-              <p className="text-gray-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                Luxurious 100% human hair wigs and bundle deals crafted to make you feel glamorous, confident, and effortlessly beautiful.
+              <p className="text-gray-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
+                Luxurious 100% human hair wigs, HD Swiss lace closures, and custom bundle deals designed for every woman and every look.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">

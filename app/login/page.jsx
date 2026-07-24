@@ -45,9 +45,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-pink-100/80 space-y-6 relative overflow-hidden">
         
         <div className="text-center space-y-2">
-          <span className="font-serif text-3xl font-bold text-luxe-gold block">Versatile By Versha</span>
-          <h1 className="font-serif text-3xl font-extrabold text-gray-900">Welcome Back</h1>
-          <p className="text-xs text-gray-500">Sign in to access your saved wishlist and cart</p>
+          <span className="font-serif text-3xl font-bold text-luxe-gold block">VERSATILE BY VERSHA'</span>
+          <h1 className="font-serif text-3xl font-extrabold text-gray-900">Welcome Back, Queen</h1>
+          <p className="text-xs text-gray-500">Sign in to access your saved wishlist, orders, and cart</p>
         </div>
 
         {error && (
@@ -65,7 +65,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="customer@luxehair.com"
+                placeholder="you@example.com"
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
               />
               <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />

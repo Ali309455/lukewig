@@ -8,6 +8,7 @@ import { Star, ShoppingBag, Truck, ShieldCheck, RefreshCw, Heart, ArrowLeft } fr
 import { useCart } from "@/context/CartContext";
 import { ProductDetailsShimmer } from "@/components/common/LoadingShimmer";
 import ProductCard from "@/components/shop/ProductCard";
+import ProductReviews from "@/components/ProductReviews/ProductReviews";
 import { INITIAL_PRODUCTS } from "@/lib/mockData";
 
 export default function ProductDetailPage() {
@@ -263,6 +264,11 @@ export default function ProductDetailPage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Product Reviews Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ProductReviews productId={product.id} productName={product.name} />
       </div>
 
       {/* Related Products */}
