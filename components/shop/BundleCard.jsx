@@ -37,7 +37,7 @@ export default function BundleCard({ bundle }) {
             src={bundle.image}
             alt={bundle.title}
             fill
-            className="object-cover object-center"
+            className="object-contain object-center"
           />
           <span className="absolute bottom-3 right-3 bg-luxe-rose text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
             {bundle.savings}

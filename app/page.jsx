@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Shield, Truck, Award, Star, RefreshCw } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Shield,
+  Truck,
+  Award,
+  Star,
+  RefreshCw,
+} from "lucide-react";
 import ProductCard from "@/components/shop/ProductCard";
 import BundleCard from "@/components/shop/BundleCard";
 import { ProductGridShimmer } from "@/components/common/LoadingShimmer";
@@ -24,8 +32,8 @@ export default function HomePage() {
 
   return (
     <div className="space-y-16 lg:space-y-24">
-      
       {/* 1. HERO SECTION */}
+        {/* 1. HERO SECTION */}
       <section className="relative bg-gradient-to-br from-[#fff8f9] via-[#ffeef3] to-[#fff8f8] pt-12 pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -90,42 +98,58 @@ export default function HomePage() {
         </div>
       </section>
 
+      
+
       {/* 2. FEATURES BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100/60 hover:-translate-y-1 transition-all text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-luxe-rose/10 text-luxe-rose flex items-center justify-center mx-auto">
               <Shield className="w-6 h-6" />
             </div>
-            <h3 className="font-serif text-xl font-bold text-gray-900">100% HD Swiss Lace</h3>
-            <p className="text-xs text-gray-500">Melts seamlessly into all skin tones naturally</p>
+            <h3 className="font-serif text-xl font-bold text-gray-900">
+              100% HD Swiss Lace
+            </h3>
+            <p className="text-xs text-gray-500">
+              Melts seamlessly into all skin tones naturally
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100/60 hover:-translate-y-1 transition-all text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-luxe-gold/10 text-luxe-gold flex items-center justify-center mx-auto">
               <Award className="w-6 h-6" />
             </div>
-            <h3 className="font-serif text-xl font-bold text-gray-900">Unprocessed Virgin Hair</h3>
-            <p className="text-xs text-gray-500">Bleach & dyeable up to #613 light blondes</p>
+            <h3 className="font-serif text-xl font-bold text-gray-900">
+              Unprocessed Virgin Hair
+            </h3>
+            <p className="text-xs text-gray-500">
+              Bleach & dyeable up to #613 light blondes
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100/60 hover:-translate-y-1 transition-all text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-luxe-rose/10 text-luxe-rose flex items-center justify-center mx-auto">
               <Truck className="w-6 h-6" />
             </div>
-            <h3 className="font-serif text-xl font-bold text-gray-900">Express Delivery</h3>
-            <p className="text-xs text-gray-500">Ships within 2-4 business days worldwide</p>
+            <h3 className="font-serif text-xl font-bold text-gray-900">
+              Express Delivery
+            </h3>
+            <p className="text-xs text-gray-500">
+              Ships within 2-4 business days worldwide
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100/60 hover:-translate-y-1 transition-all text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-luxe-gold/10 text-luxe-gold flex items-center justify-center mx-auto">
               <RefreshCw className="w-6 h-6" />
             </div>
-            <h3 className="font-serif text-xl font-bold text-gray-900">30-Day Guarantee</h3>
-            <p className="text-xs text-gray-500">Risk-free exchanges & full satisfaction</p>
+            <h3 className="font-serif text-xl font-bold text-gray-900">
+              30-Day Guarantee
+            </h3>
+            <p className="text-xs text-gray-500">
+              Risk-free exchanges & full satisfaction
+            </p>
           </div>
-
         </div>
       </section>
 
@@ -139,7 +163,8 @@ export default function HomePage() {
             Trending Wigs Collection
           </h2>
           <p className="text-gray-500 text-sm">
-            Hand-crafted HD lace frontal and glueless wigs designed for instant luxury.
+            Hand-crafted HD lace frontal and glueless wigs designed for instant
+            luxury.
           </p>
         </div>
 
@@ -217,18 +242,26 @@ export default function HomePage() {
 
               <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
                 <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-luxe-rose">
-                  <Image src={rev.image} alt={rev.name} fill className="object-cover" />
+                  <Image
+                    src={rev.image}
+                    alt={rev.name}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm text-gray-900">{rev.name}</h4>
-                  <span className="text-xs text-luxe-rose font-medium">{rev.role}</span>
+                  <h4 className="font-semibold text-sm text-gray-900">
+                    {rev.name}
+                  </h4>
+                  <span className="text-xs text-luxe-rose font-medium">
+                    {rev.role}
+                  </span>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </section>
-
     </div>
   );
 }

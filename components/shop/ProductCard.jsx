@@ -41,7 +41,7 @@ export default function ProductCard({ product }) {
           src={currentVariant.image || product.image}
           alt={product.name}
           fill
-          className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          className="object-contain object-center group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         

@@ -56,13 +56,13 @@ export default function ProductDetailPage() {
         
         {/* Left Image Gallery */}
         <div className="space-y-4">
-          <div className="relative w-full h-[450px] sm:h-[540px] rounded-3xl overflow-hidden bg-pink-50/50 shadow-lg border border-pink-100">
+          <div className="relative w-full h-[450px] sm:h-[540px] rounded-3xl overflow-hidden bg-[#f9f9fd] shadow-lg border border-pink-100">
             <Image
               src={currentVariant.image || product.image}
               alt={product.name}
               fill
               priority
-              className="object-cover object-center"
+              className="object-contain object-center"
             />
             {product.isOnSale && (
               <span className="absolute top-6 left-6 bg-luxe-rose text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
@@ -73,7 +73,7 @@ export default function ProductDetailPage() {
 
           {/* Thumbnails Row */}
           {product.sizes && (
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="flex gap-3 overflow-x-auto p-2">
               {product.sizes.map((s, idx) => (
                 <button
                   key={idx}
@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <Image src={s.image} alt={s.size} fill className="object-cover" />
+                  <Image src={s.image} alt={s.size} fill className="object-contain" />
                 </button>
               ))}
             </div>

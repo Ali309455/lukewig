@@ -1,137 +1,102 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { canUserReviewProduct } from "@/permissions/reviewPermissions";
+import authService from "../services/AuthService";
+import reviewService from "../services/ReviewService";
 import {
   calculateAverageRating,
   calculateTotalReviews,
   calculateStarDistribution,
 } from "@/utils/ratingUtils";
-import { MOCK_ORDERS } from "@/lib/mockOrders";
 
-// Mock baseline reviews per product
-const INITIAL_REVIEWS_BY_PRODUCT = {
-  "wig-1": [
-    {
-      id: "rev-1",
-      productId: "wig-1",
-      userId: "user-99",
-      userName: "Jessica M.",
-      rating: 5,
-      reviewText: "The lace literally melted into my skin! Everyone thought it was my real hair growing from my scalp.",
-      createdAt: "2026-07-15T10:30:00Z",
-      verified: true,
-    },
-    {
-      id: "rev-2",
-      productId: "wig-1",
-      userId: "user-98",
-      userName: "Sophia K.",
-      rating: 5,
-      reviewText: "Super soft human hair, zero shedding even after washing 3 times. Definitely buying another length!",
-      createdAt: "2026-07-12T14:20:00Z",
-      verified: true,
-    },
-    {
-      id: "rev-3",
-      productId: "wig-1",
-      userId: "user-97",
-      userName: "Amanda L.",
-      rating: 4,
-      reviewText: "Worth buying! High quality hair and fast delivery.",
-      createdAt: "2026-07-02T08:15:00Z",
-      verified: true,
-    },
-  ],
-  "wig-2": [
-    {
-      id: "rev-4",
-      productId: "wig-2",
-      userId: "user-96",
-      userName: "Chloe T.",
-      rating: 5,
-      reviewText: "Effortless body wave curls! Took me literally 30 seconds to put on.",
-      createdAt: "2026-07-18T16:00:00Z",
-      verified: true,
-    },
-  ],
+const DEFAULT_PERMISSION = {
+  canReview: false,
+  reason: "Login to write a review.",
+  code: "NOT_LOGGED_IN",
 };
 
 export function useReviews(productId) {
-  const { user } = useAuth();
+  const { user } = authService.getCurrentUser();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [permissionStatus, setPermissionStatus] = useState(DEFAULT_PERMISSION);
 
-  // Load reviews from localStorage + baseline initial reviews
   useEffect(() => {
     if (!productId) return;
 
-    const storageKey = `luxe_reviews_${productId}`;
-    const saved = localStorage.getItem(storageKey);
-    
-    if (saved) {
+    let active = true;
+
+    async function loadReviews() {
+      setLoading(true);
       try {
-        setReviews(JSON.parse(saved));
-      } catch (err) {
-        console.error("Failed to parse stored reviews", err);
-        setReviews(INITIAL_REVIEWS_BY_PRODUCT[productId] || INITIAL_REVIEWS_BY_PRODUCT["wig-1"]);
+        const data = await reviewService.getProductReviews(productId);
+        if (active) setReviews(data);
+      } catch (error) {
+        console.error("Failed to load reviews", error);
+        if (active) setReviews([]);
+      } finally {
+        if (active) setLoading(false);
       }
-    } else {
-      setReviews(INITIAL_REVIEWS_BY_PRODUCT[productId] || INITIAL_REVIEWS_BY_PRODUCT["wig-1"]);
     }
 
-    setLoading(false);
+    loadReviews();
+    return () => {
+      active = false;
+    };
   }, [productId]);
 
-  // Save to localStorage when reviews change
-  const saveReviews = (updatedReviews) => {
-    setReviews(updatedReviews);
-    if (productId) {
-      localStorage.setItem(`luxe_reviews_${productId}`, JSON.stringify(updatedReviews));
-    }
-  };
+  useEffect(() => {
+    if (!productId) return;
 
-  // Calculated Ratings
+    let active = true;
+
+    async function loadPermission() {
+      if (!user?.uid) {
+        if (active) setPermissionStatus(DEFAULT_PERMISSION);
+        return;
+      }
+
+      try {
+        const status = await reviewService.canUserReview(user.uid, productId);
+        if (active) setPermissionStatus(status);
+      } catch (error) {
+        console.error("Failed to check review permission", error);
+        if (active) {
+          setPermissionStatus({
+            canReview: false,
+            reason: "Unable to verify review eligibility.",
+            code: "ERROR",
+          });
+        }
+      }
+    }
+
+    loadPermission();
+    return () => {
+      active = false;
+    };
+  }, [user, productId, reviews]);
+
   const averageRating = useMemo(() => calculateAverageRating(reviews), [reviews]);
   const totalReviews = useMemo(() => calculateTotalReviews(reviews), [reviews]);
   const starDistribution = useMemo(() => calculateStarDistribution(reviews), [reviews]);
 
-  // Permission Check
-  const permissionStatus = useMemo(() => {
-    return canUserReviewProduct({
-      user,
-      productId,
-      existingReviews: reviews,
-      orders: MOCK_ORDERS,
-    });
-  }, [user, productId, reviews]);
-
-  // Submit a new review
   const addReview = useCallback(
-    ({ rating, reviewText }) => {
+    async ({ rating, reviewText }) => {
       if (!user) {
         throw new Error("You must be logged in to submit a review.");
       }
 
-      const newReview = {
-        id: `rev-${Date.now()}`,
+      const created = await reviewService.createReview({
         productId,
-        userId: user.uid,
-        userName: user.displayName || user.email?.split("@")[0] || "Customer",
-        userEmail: user.email,
-        rating: Number(rating),
+        rating,
         reviewText,
-        createdAt: new Date().toISOString(),
-        verified: true,
-      };
+      });
 
-      const updated = [newReview, ...reviews];
-      saveReviews(updated);
-
-      return newReview;
+      setReviews((prev) => [created, ...prev]);
+      return created;
     },
-    [user, productId, reviews]
+    [user, productId]
   );
 
   return {

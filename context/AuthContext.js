@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
+import authService from "../services/AuthService";
 
 const AuthContext = createContext();
 
@@ -9,62 +10,81 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check localStorage for persisted user session
-    const savedUser = localStorage.getItem("luxe_user");
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (err) {
-        console.error("Failed to parse saved user", err);
-      }
-    }
-    setLoading(false);
+    const unsubscribe = authService.subscribeToAuthState((firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password) => {
     setLoading(true);
-    // Simulate API / Firebase delay
-    await new Promise((res) => setTimeout(res, 800));
-
-    // Demo admin check or standard user login
-    const isAdmin = email.toLowerCase().includes("admin");
-    const userData = {
-      uid: isAdmin ? "admin-123" : `user-${Date.now()}`,
-      email,
-      displayName: email.split("@")[0],
-      role: isAdmin ? "admin" : "customer",
-    };
-
-    setUser(userData);
-    localStorage.setItem("luxe_user", JSON.stringify(userData));
-    setLoading(false);
-    return userData;
+    try {
+      const userData = await authService.login(email, password);
+      setUser(userData);
+      return userData;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signup = async (name, email, password) => {
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 800));
-
-    const userData = {
-      uid: `user-${Date.now()}`,
-      email,
-      displayName: name,
-      role: "customer",
-    };
-
-    setUser(userData);
-    localStorage.setItem("luxe_user", JSON.stringify(userData));
-    setLoading(false);
-    return userData;
+    try {
+      const userData = await authService.register(name, email, password);
+      setUser(userData);
+      return userData;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
+    await authService.logout();
     setUser(null);
-    localStorage.removeItem("luxe_user");
+  };
+
+  const googleLogin = async () => {
+    setLoading(true);
+    try {
+      const userData = await authService.googleLogin();
+      setUser(userData);
+      return userData;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    await authService.forgotPassword(email);
+  };
+
+  const verifyEmail = async () => {
+    await authService.verifyEmail();
+  };
+
+  const updateProfile = async (data) => {
+    const userData = await authService.updateProfile(data);
+    setUser(userData);
+    return userData;
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, isAdmin: user?.role === "admin" }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        signup,
+        logout,
+        googleLogin,
+        forgotPassword,
+        verifyEmail,
+        updateProfile,
+        isAdmin: user?.role === "admin",
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

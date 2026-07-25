@@ -79,7 +79,7 @@ function NavbarContent() {
     <>
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-sm transition-all duration-200">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-2">
+          <div className="flex items-center justify-between min-h-20 py-2 sm:py-2.5 gap-2">
             
             {/* Mobile Hamburger Menu Toggle */}
             <div className="flex items-center lg:hidden flex-shrink-0">
@@ -97,15 +97,15 @@ function NavbarContent() {
 
             {/* Brand Logo - Responsive & Zero Layout Shift */}
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="group flex items-center focus:outline-none focus:ring-2 focus:ring-luxe-rose rounded-xl p-1">
-                <div className="relative w-36 sm:w-44 h-12 flex items-center">
+              <Link href="/" className="group flex items-center focus:outline-none focus:ring-2 focus:ring-luxe-rose rounded-3xl">
+                <div className="flex items-center justify-center rounded-2xl sm:rounded-3xl border border-pink-100 bg-gradient-to-br from-white via-pink-50/90 to-rose-50/50 shadow-md shadow-pink-100/40 px-3 py-2 sm:px-5 sm:py-2.5 w-[11.5rem] sm:w-[15.5rem] h-14 sm:h-[4.5rem] overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
                   <Image
-                    src="/images/logo.svg"
+                    src="/images/logo.png"
                     alt="VERSATILE BY VERSHA' Logo"
-                    width={180}
-                    height={50}
+                    width={260}
+                    height={72}
                     priority
-                    className="object-contain h-full w-auto group-hover:scale-105 transition-transform duration-300"
+                    className="object-contain w-full h-full max-h-10 sm:max-h-[3.25rem]"
                   />
                 </div>
               </Link>
@@ -263,13 +263,13 @@ function NavbarContent() {
             >
               <div>
                 <div className="flex items-center justify-between pb-6 border-b border-pink-100">
-                  <div className="relative w-36 h-10">
+                <div className="flex items-center justify-center rounded-2xl border border-pink-100 bg-gradient-to-br from-white to-pink-50/80 shadow-sm px-4 py-2.5 w-44 h-14 overflow-hidden">
                     <Image
-                      src="/images/logo.svg"
+                      src="/images/logo.png"
                       alt="Luxe Hair Logo"
-                      width={140}
-                      height={40}
-                      className="object-contain"
+                      width={200}
+                      height={56}
+                      className="object-contain w-full h-full max-h-10"
                     />
                   </div>
                   <button

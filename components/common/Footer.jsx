@@ -38,12 +38,12 @@ export default function Footer() {
         
         {/* Brand Info */}
         <div className="space-y-4">
-          <div className="relative w-52 h-16 bg-white/5 p-2 rounded-2xl border border-white/10 flex items-center">
+          <div className="flex items-center justify-center rounded-3xl bg-white/10 p-3 sm:p-4 border border-white/15 shadow-inner w-64 sm:w-72 h-20 sm:h-24 overflow-hidden">
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="VERSATILE BY VERSHA' Logo"
-              width={200}
-              height={60}
+              width={280}
+              height={80}
               className="object-contain w-full h-full"
             />
           </div>
