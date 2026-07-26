@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -9,6 +9,7 @@ import { useCart } from "@/context/CartContext";
 import { ProductDetailsShimmer } from "@/components/common/LoadingShimmer";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductReviews from "@/components/ProductReviews/ProductReviews";
+import productService from "@/services/ProductService";
 import { INITIAL_PRODUCTS } from "@/lib/mockData";
 
 export default function ProductDetailPage() {
@@ -20,14 +21,21 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
+
+  const loadProducts = useCallback(async () => {
+      try {
+        const product = await productService.getProduct(params.id);
+        setProduct(product);
+      } catch (err) {
+        console.log(err.message + "error");
+      } finally {
+        setLoading(false);
+      }
+    }, []);
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      const found = INITIAL_PRODUCTS.find((p) => p.id === params.id) || INITIAL_PRODUCTS[0];
-      setProduct(found);
-      setLoading(false);
-    }, 400);
-    return () => clearTimeout(timer);
+
+    loadProducts();
+    
   }, [params.id]);
 
   if (loading || !product) {
@@ -236,12 +244,7 @@ export default function ProductDetailPage() {
 
           {activeTab === "description" ? (
             <div className="text-gray-600 text-sm space-y-3 leading-relaxed">
-              <p>
-                Crafted from 100% ethically sourced human hair, our {product.name} delivers unbeatable natural movement, shine, and soft texture. The invisible pre-plucked HD lace hairline melts into all skin tones without bleach lines.
-              </p>
-              <p>
-                Each wig features adjustable straps and security combs inside the breathable cap for a snug 30-second glueless fit.
-              </p>
+              {product.fullDescription}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
