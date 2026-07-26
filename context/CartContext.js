@@ -38,7 +38,7 @@ export function CartProvider({ children }) {
     }, 3000);
   };
 
-  const addToCart = (product, sizeVariant, quantity = 1) => {
+  const addToCart = (product, sizeVariant, quantity = 1, itemType = "product") => {
     setCartItems((prev) => {
       const existingIndex = prev.findIndex(
         (item) => item.productId === product.id && item.size === sizeVariant.size
@@ -59,6 +59,7 @@ export function CartProvider({ children }) {
             price: sizeVariant.price,
             image: sizeVariant.image || product.image,
             qty: quantity,
+            itemType,
           },
         ];
       }

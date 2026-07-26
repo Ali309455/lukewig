@@ -98,6 +98,9 @@ export default function ProductCard({ product }) {
                   }`}
                 >
                   {s.size}
+                  {s.stock > 0 && s.stock < 10 && (
+                    <span className="ml-0.5 text-[9px] text-amber-600 font-normal">({s.stock})</span>
+                  )}
                 </button>
               ))}
             </>
@@ -122,14 +125,20 @@ export default function ProductCard({ product }) {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => addToCart(product, currentVariant, 1)}
-          className="px-4 py-2 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose"
-        >
-          <ShoppingBag className="w-3.5 h-3.5" />
-          <span>Add</span>
-        </button>
+        {currentVariant.stock > 0 ? (
+          <button
+            type="button"
+            onClick={() => addToCart(product, currentVariant, 1, "product")}
+            className="px-4 py-2 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Add</span>
+          </button>
+        ) : (
+          <span className="px-4 py-2 rounded-full bg-gray-200 text-gray-500 text-xs font-semibold">
+            Sold Out
+          </span>
+        )}
       </div>
 
     </div>

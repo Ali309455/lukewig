@@ -131,9 +131,21 @@ export default function ProductDetailPage() {
                 ${product.originalPrice}
               </span>
             )}
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-              In Stock & Ready to Ship
-            </span>
+            {currentVariant.stock > 0 ? (
+              <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                currentVariant.stock < 10
+                  ? "bg-amber-100 text-amber-700"
+                  : "bg-emerald-100 text-emerald-700"
+              }`}>
+                {currentVariant.stock < 10
+                  ? `Only ${currentVariant.stock} left`
+                  : "In Stock & Ready to Ship"}
+              </span>
+            ) : (
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-100 text-red-700">
+                Out of Stock
+              </span>
+            )}
           </div>
 
           <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
@@ -148,47 +160,66 @@ export default function ProductDetailPage() {
                 <span className="text-luxe-rose font-semibold">Active: {currentVariant.size}</span>
               </div>
               <div className="flex flex-wrap gap-3">
-                {product.sizes.map((s, idx) => (
-                  <button
-                    key={s.size}
-                    onClick={() => setSelectedVariantIndex(idx)}
-                    className={`px-5 py-2.5 rounded-xl font-bold text-xs border transition-all ${
-                      selectedVariantIndex === idx
-                        ? "bg-luxe-rose text-white border-luxe-rose shadow-md"
-                        : "bg-white text-gray-700 border-gray-200 hover:border-luxe-rose"
-                    }`}
-                  >
-                    {s.size} — ${s.price}
-                  </button>
-                ))}
+                {product.sizes.map((s, idx) => {
+                  const sizeStock = s.stock ?? 0;
+                  return (
+                    <button
+                      key={s.size}
+                      onClick={() => setSelectedVariantIndex(idx)}
+                      disabled={sizeStock === 0}
+                      className={`px-5 py-2.5 rounded-xl font-bold text-xs border transition-all ${
+                        selectedVariantIndex === idx
+                          ? "bg-luxe-rose text-white border-luxe-rose shadow-md"
+                          : sizeStock === 0
+                          ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed line-through"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-luxe-rose"
+                      }`}
+                    >
+                      {s.size} — ${s.price}
+                      {sizeStock > 0 && sizeStock < 10 && (
+                        <span className="ml-1 text-[9px] font-normal opacity-80">
+                          ({sizeStock} left)
+                        </span>
+                      )}
+                      {sizeStock === 0 && (
+                        <span className="ml-1 text-[9px] font-normal">(Sold Out)</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* Quantity Controls & Add to Cart */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-            <div className="flex items-center justify-between border border-gray-200 rounded-full px-4 py-2 bg-gray-50 w-36">
-              <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="text-gray-500 hover:text-luxe-rose text-lg font-bold"
-              >
-                -
-              </button>
-              <span className="font-semibold text-sm">{quantity}</span>
-              <button
-                onClick={() => setQuantity((q) => q + 1)}
-                className="text-gray-500 hover:text-luxe-rose text-lg font-bold"
-              >
-                +
-              </button>
-            </div>
+              <div className="flex items-center justify-between border border-gray-200 rounded-full px-4 py-2 bg-gray-50 w-36">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="text-gray-500 hover:text-luxe-rose text-lg font-bold"
+                >
+                  -
+                </button>
+                <span className="font-semibold text-sm">{quantity}</span>
+                <button
+                  onClick={() => setQuantity((q) => Math.min(q + 1, currentVariant.stock || 1))}
+                  className="text-gray-500 hover:text-luxe-rose text-lg font-bold"
+                >
+                  +
+                </button>
+              </div>
 
             <button
-              onClick={() => addToCart(product, currentVariant, quantity)}
-              className="flex-1 py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2"
+              onClick={() => addToCart(product, currentVariant, quantity, "product")}
+              disabled={currentVariant.stock === 0}
+              className={`flex-1 py-4 rounded-full font-semibold text-sm shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2 ${
+                currentVariant.stock === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-luxe-rose hover:bg-luxe-rose-dark text-white"
+              }`}
             >
               <ShoppingBag className="w-5 h-5" />
-              <span>Add To Shopping Bag</span>
+              <span>{currentVariant.stock === 0 ? "Out of Stock" : "Add To Shopping Bag"}</span>
             </button>
 
             <button className="p-4 rounded-full border border-gray-200 hover:border-luxe-rose text-gray-400 hover:text-luxe-rose transition-colors flex items-center justify-center">

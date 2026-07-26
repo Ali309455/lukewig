@@ -1,11 +1,14 @@
 import { where, orderBy } from "firebase/firestore";
 import dbService from "./DBService";
+import productService from "./ProductService";
+import bundleService from "./BundleService";
 
 const ORDERS_COLLECTION = "orders";
 
 /** @typedef {'Placed'|'Processing'|'Dispatched'|'Delivered'|'Cancelled'|'Refunded'} OrderStatus */
 
 export const ORDER_STATUSES = [
+  "Pending",
   "Placed",
   "Processing",
   "Dispatched",
@@ -27,15 +30,57 @@ class OrderService {
    */
   async createOrder(orderData) {
     try {
-      const status = orderData.status || "Placed";
-      if (!ORDER_STATUSES.includes(status)) {
-        throw new Error(`Invalid order status: ${status}`);
+      const orderStatus = orderData.orderStatus || orderData.status || "Pending";
+      if (!ORDER_STATUSES.includes(orderStatus)) {
+        throw new Error(`Invalid order status: ${orderStatus}`);
+      }
+
+      // Validate stock / bundle existence before creating order
+      if (orderData.items && Array.isArray(orderData.items)) {
+        for (const item of orderData.items) {
+          const itemType = item.itemType || "product";
+
+          if (itemType === "bundle") {
+            const bundle = await bundleService.getBundle(item.productId);
+            if (!bundle) {
+              throw new Error(`Bundle "${item.name}" not found.`);
+            }
+          } else {
+            const product = await productService.getProduct(item.productId);
+            const variant = productService.getVariantBySize(product, item.size);
+            if (!variant) {
+              throw new Error(
+                `Size "${item.size}" not available for "${product.name}".`
+              );
+            }
+            const availableStock = variant.stock ?? 0;
+            if (item.qty > availableStock) {
+              throw new Error(
+                `Insufficient stock for "${product.name}" (${item.size}). Available: ${availableStock}, requested: ${item.qty}.`
+              );
+            }
+          }
+        }
       }
 
       const id = await this.db.create(ORDERS_COLLECTION, {
         ...orderData,
-        status,
+        orderStatus,
       });
+
+      // Decrement stock after successful order creation (products only)
+      if (orderData.items && Array.isArray(orderData.items)) {
+        for (const item of orderData.items) {
+          if (item.itemType === "bundle") continue;
+          if (item.size && item.size !== "Bundle Deal") {
+            await productService.decrementVariantStock(
+              item.productId,
+              item.size,
+              item.qty || 1
+            );
+          }
+        }
+      }
 
       return this.getOrder(id);
     } catch (error) {
@@ -91,12 +136,12 @@ class OrderService {
    * @param {string} orderId
    * @param {OrderStatus} status
    */
-  async updateOrderStatus(orderId, status) {
+  async updateOrderStatus(orderId, orderStatus) {
     try {
-      if (!ORDER_STATUSES.includes(status)) {
-        throw new Error(`Invalid order status: ${status}`);
+      if (!ORDER_STATUSES.includes(orderStatus)) {
+        throw new Error(`Invalid order status: ${orderStatus}`);
       }
-      await this.db.update(ORDERS_COLLECTION, orderId, { status });
+      await this.db.update(ORDERS_COLLECTION, orderId, { orderStatus });
       return this.getOrder(orderId);
     } catch (error) {
       console.error("OrderService.updateOrderStatus failed:", error);
@@ -125,7 +170,7 @@ class OrderService {
   hasDeliveredProduct(userId, productId, ordersOverride = null) {
     const orders = ordersOverride || [];
     return orders.some((order) => {
-      if (order.userId !== userId || order.status !== "Delivered") return false;
+      if (order.userId !== userId || order.orderStatus !== "Delivered") return false;
       if (order.productId === productId) return true;
       if (Array.isArray(order.items)) {
         return order.items.some((item) => item.productId === productId);

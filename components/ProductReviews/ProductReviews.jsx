@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { MessageSquare, Star, Filter, ArrowUpDown, Sparkles } from "lucide-react";
+import { MessageSquare, Star, Filter, ArrowUpDown, Sparkles, Lock } from "lucide-react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import { useReviews } from "@/hooks/useReviews";
 import RatingStars from "./RatingStars";
 import ReviewCard from "./ReviewCard";
 import ReviewForm from "./ReviewForm";
 
 export default function ProductReviews({ productId, productName = "Product" }) {
+  const { user } = useAuth();
   const {
     reviews,
     loading,
@@ -58,14 +61,31 @@ export default function ProductReviews({ productId, productName = "Product" }) {
           </h2>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowForm(!showForm)}
-          className="px-5 py-2.5 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-xs shadow-md transition-all flex items-center gap-2"
-        >
-          <MessageSquare className="w-4 h-4" />
-          <span>{showForm ? "Close Review Form" : "Write a Review"}</span>
-        </button>
+        {user ? (
+          permissionStatus.canReview ? (
+            <button
+              type="button"
+              onClick={() => setShowForm(!showForm)}
+              className="px-5 py-2.5 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-xs shadow-md transition-all flex items-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>{showForm ? "Close Review Form" : "Write a Review"}</span>
+            </button>
+          ) : (
+            <span className="px-5 py-2.5 rounded-full bg-gray-100 text-gray-400 text-xs font-semibold flex items-center gap-2 cursor-not-allowed">
+              <Lock className="w-4 h-4" />
+              Review Locked
+            </span>
+          )
+        ) : (
+          <Link
+            href="/login"
+            className="px-5 py-2.5 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-xs shadow-md transition-all flex items-center gap-2"
+          >
+            <Lock className="w-4 h-4" />
+            <span>Sign In to Review</span>
+          </Link>
+        )}
       </div>
 
       {/* Aggregate Rating & Star Breakdown Grid */}

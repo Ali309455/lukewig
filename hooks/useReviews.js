@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import authService from "../services/AuthService";
-import reviewService from "../services/ReviewService";
+import { useAuth } from "@/context/AuthContext";
+import reviewService from "@/services/ReviewService";
 import {
   calculateAverageRating,
   calculateTotalReviews,
@@ -16,7 +16,7 @@ const DEFAULT_PERMISSION = {
 };
 
 export function useReviews(productId) {
-  const { user } = authService.getCurrentUser();
+  const { user } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [permissionStatus, setPermissionStatus] = useState(DEFAULT_PERMISSION);

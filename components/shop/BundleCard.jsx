@@ -19,7 +19,8 @@ export default function BundleCard({ bundle }) {
         price: bundle.price,
         image: bundle.image,
       },
-      1
+      1,
+      "bundle"
     );
   };
 

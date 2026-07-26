@@ -21,7 +21,11 @@ class ProductService {
         averageRating: productData.averageRating ?? productData.rating ?? 0,
         ratingCount: productData.ratingCount ?? productData.reviewsCount ?? 0,
         ratingSum: productData.ratingSum ?? 0,
-        stock: productData.stock ?? 0,
+        sizes: (productData.sizes || []).map((s) => ({
+          size: s.size,
+          price: s.price ?? 0,
+          stock: s.stock ?? 0,
+        })),
         isOnSale: productData.isOnSale ?? false,
         images: productData.images ?? [],
       });
@@ -191,8 +195,80 @@ class ProductService {
   }
 
   /**
+   * Find a size variant by size string.
+   * @param {Object} product
+   * @param {string} size
+   * @returns {Object|null}
+   */
+  getVariantBySize(product, size) {
+    if (!product || !Array.isArray(product.sizes)) return null;
+    return product.sizes.find((s) => s.size === size) || null;
+  }
+
+  /**
+   * Update stock for a specific size variant.
+   * @param {string} productId
+   * @param {string} size
+   * @param {number} stock
+   */
+  async updateVariantStock(productId, size, stock) {
+    try {
+      if (typeof stock !== "number" || stock < 0) {
+        throw new Error("Stock must be a non-negative number.");
+      }
+      if (!size) {
+        throw new Error("Size is required.");
+      }
+      const product = await this.db.get(PRODUCTS_COLLECTION, productId);
+      if (!product) throw new Error("Product not found.");
+      const sizes = (product.sizes || []).map((s) =>
+        s.size === size ? { ...s, stock } : s
+      );
+      if (!sizes.find((s) => s.size === size)) {
+        throw new Error(`Variant size "${size}" not found.`);
+      }
+      await this.db.update(PRODUCTS_COLLECTION, productId, { sizes });
+      return this.getProduct(productId);
+    } catch (error) {
+      console.error("ProductService.updateVariantStock failed:", error);
+      throw new Error(error.message || "Failed to update variant stock.");
+    }
+  }
+
+  /**
+   * Decrement stock for a specific size variant by quantity.
+   * @param {string} productId
+   * @param {string} size
+   * @param {number} qty
+   */
+  async decrementVariantStock(productId, size, qty = 1) {
+    try {
+      if (!size) throw new Error("Size is required.");
+      const product = await this.db.get(PRODUCTS_COLLECTION, productId);
+      if (!product) throw new Error("Product not found.");
+      const sizes = (product.sizes || []).map((s) => {
+        if (s.size === size) {
+          const currentStock = s.stock ?? 0;
+          const newStock = Math.max(0, currentStock - qty);
+          return { ...s, stock: newStock };
+        }
+        return s;
+      });
+      if (!sizes.find((s) => s.size === size)) {
+        throw new Error(`Variant size "${size}" not found.`);
+      }
+      await this.db.update(PRODUCTS_COLLECTION, productId, { sizes });
+      return this.getProduct(productId);
+    } catch (error) {
+      console.error("ProductService.decrementVariantStock failed:", error);
+      throw new Error(error.message || "Failed to decrement variant stock.");
+    }
+  }
+
+  /**
    * @param {string} productId
    * @param {number} stock
+   * @deprecated Use updateVariantStock instead
    */
   async updateStock(productId, stock) {
     try {

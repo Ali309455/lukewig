@@ -1,37 +1,21 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
-import { ShoppingBag, Search, Heart, User, Menu, X, ShieldCheck, LogOut, Sparkles } from "lucide-react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { ShoppingBag, Search, Heart, User, Menu, X, ShieldCheck, LogOut, Sparkles, Package } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
-function NavbarContent() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+// Active Link helper isolated inside Suspense
+function NavLink({ href, children, className, activeClassName }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const { totalItemCount } = useCart();
-  const { user, isAdmin, logout } = useAuth();
-
-  // Navigation Links
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Shop All", href: "/shop" },
-    { name: "HD Laces", href: "/shop?category=HD+Laces+%26+Closures" },
-    { name: "Bundle Deals", href: "/shop?category=bundles" },
-    { name: "About Us", href: "/about" },
-    { name: "Contact", href: "/contact" },
-  ];
-
-  // Helper to check active state including search query params
   const isLinkActive = useCallback(
-    (href) => {
-      const [targetPath, targetQuery] = href.split("?");
+    (targetHref) => {
+      const [targetPath, targetQuery] = targetHref.split("?");
       if (pathname !== targetPath) return false;
       if (!targetQuery) {
         if (targetPath === "/shop" && searchParams.get("category")) return false;
@@ -43,6 +27,37 @@ function NavbarContent() {
     },
     [pathname, searchParams]
   );
+
+  const active = isLinkActive(href);
+
+  return (
+    <Link href={href} className={`${className} ${active ? activeClassName : ""}`}>
+      {children}
+      {active && <span className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-luxe-rose rounded-full animate-fade-in" />}
+    </Link>
+  );
+}
+
+function NavbarContent() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const userDropdownRef = useRef(null);
+  const pathname = usePathname();
+
+  const { totalItemCount } = useCart();
+  const { user, isAdmin, logout } = useAuth();
+  const router = useRouter();
+
+  // Navigation Links
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Shop All", href: "/shop" },
+    { name: "HD Laces", href: "/shop?category=HD+Laces+%26+Closures" },
+    { name: "Bundle Deals", href: "/shop?category=bundles" },
+    { name: "About Us", href: "/about" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   // Close menus on Escape key
   useEffect(() => {
@@ -73,7 +88,20 @@ function NavbarContent() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
+
+  // Close user dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+        setUserDropdownOpen(false);
+      }
+    };
+    if (userDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [userDropdownOpen]);
 
   return (
     <>
@@ -95,13 +123,13 @@ function NavbarContent() {
               </button>
             </div>
 
-            {/* Brand Logo - Responsive & Zero Layout Shift */}
+            {/* Brand Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="group flex items-center focus:outline-none focus:ring-2 focus:ring-luxe-rose rounded-3xl">
                 <div className="flex items-center justify-center rounded-2xl sm:rounded-3xl border border-pink-100 bg-gradient-to-br from-white via-pink-50/90 to-rose-50/50 shadow-md shadow-pink-100/40 px-3 py-2 sm:px-5 sm:py-2.5 w-[11.5rem] sm:w-[15.5rem] h-14 sm:h-[4.5rem] overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
                   <Image
                     src="/images/logo.png"
-                    alt="VERSATILE BY VERSHA' Logo"
+                    alt="VERSATILE BY VERSHA Logo"
                     width={260}
                     height={72}
                     priority
@@ -111,30 +139,23 @@ function NavbarContent() {
               </Link>
             </div>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links wrapped in Suspense */}
             <nav
               aria-label="Main Navigation"
               className="hidden lg:flex items-center space-x-1 xl:space-x-6 flex-wrap justify-center flex-1 mx-4"
             >
-              {navLinks.map((link) => {
-                const active = isLinkActive(link.href);
-                return (
-                  <Link
+              <Suspense fallback={<div className="h-6 w-48 bg-pink-50 animate-pulse rounded" />}>
+                {navLinks.map((link) => (
+                  <NavLink
                     key={link.name}
                     href={link.href}
-                    className={`text-xs xl:text-sm font-medium transition-colors duration-200 tracking-wide relative px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxe-rose ${
-                      active
-                        ? "text-luxe-rose font-semibold bg-pink-50/70"
-                        : "text-gray-700 hover:text-luxe-rose hover:bg-pink-50/40"
-                    }`}
+                    className="text-xs xl:text-sm font-medium transition-colors duration-200 tracking-wide relative px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxe-rose text-gray-700 hover:text-luxe-rose hover:bg-pink-50/40"
+                    activeClassName="text-luxe-rose font-semibold bg-pink-50/70"
                   >
                     {link.name}
-                    {active && (
-                      <span className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-luxe-rose rounded-full animate-fade-in" />
-                    )}
-                  </Link>
-                );
-              })}
+                  </NavLink>
+                ))}
+              </Suspense>
 
               {isAdmin && (
                 <Link
@@ -147,21 +168,17 @@ function NavbarContent() {
               )}
             </nav>
 
-            {/* Right Action Icons (Search, Wishlist, Cart, User) */}
+            {/* Right Action Icons */}
             <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
-              
-              {/* Search Toggle */}
               <button
                 type="button"
                 onClick={() => setSearchOpen(!searchOpen)}
                 className="p-2 text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-luxe-rose"
                 aria-label="Search items"
-                title="Search Wigs & Hair"
               >
                 <Search className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
-              {/* Wishlist */}
               <Link
                 href="/shop"
                 className="hidden sm:flex p-2 text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-luxe-rose"
@@ -171,11 +188,9 @@ function NavbarContent() {
                 <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
               </Link>
 
-              {/* Shopping Cart Button */}
               <Link
                 href="/cart"
                 className="p-2 text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors relative group focus:outline-none focus:ring-2 focus:ring-luxe-rose"
-                title="Shopping Cart"
                 aria-label={`Shopping cart with ${totalItemCount} items`}
               >
                 <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
@@ -186,8 +201,8 @@ function NavbarContent() {
                 )}
               </Link>
 
-              {/* Auth / Account Profile */}
-              <div className="relative">
+              {/* User Account Button */}
+              <div className="relative" ref={userDropdownRef}>
                 {user ? (
                   <div>
                     <button
@@ -203,7 +218,6 @@ function NavbarContent() {
                       </span>
                     </button>
 
-                    {/* Profile Dropdown */}
                     {userDropdownOpen && (
                       <div className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 border border-pink-100 z-50 animate-fade-in">
                         <div className="px-4 py-2 border-b border-gray-100">
@@ -220,11 +234,20 @@ function NavbarContent() {
                             Admin Dashboard
                           </Link>
                         )}
+                        <Link
+                          href="/orders"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="w-full text-left px-4 py-2 text-xs text-luxe-rose hover:bg-pink-50 flex items-center gap-2 font-medium"
+                        >
+                          <Package className="w-3.5 h-3.5" />
+                          My Orders
+                        </Link>
                         <button
                           type="button"
-                          onClick={() => {
-                            logout();
+                          onClick={async () => {
+                            await logout();
                             setUserDropdownOpen(false);
+                            router.push("/");
                           }}
                           className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 font-medium"
                         >
@@ -244,7 +267,6 @@ function NavbarContent() {
                   </Link>
                 )}
               </div>
-
             </div>
           </div>
         </div>
@@ -263,10 +285,10 @@ function NavbarContent() {
             >
               <div>
                 <div className="flex items-center justify-between pb-6 border-b border-pink-100">
-                <div className="flex items-center justify-center rounded-2xl border border-pink-100 bg-gradient-to-br from-white to-pink-50/80 shadow-sm px-4 py-2.5 w-44 h-14 overflow-hidden">
+                  <div className="flex items-center justify-center rounded-2xl border border-pink-100 bg-gradient-to-br from-white to-pink-50/80 shadow-sm px-4 py-2.5 w-44 h-14 overflow-hidden">
                     <Image
                       src="/images/logo.png"
-                      alt="Luxe Hair Logo"
+                      alt="VERSATILE Logo"
                       width={200}
                       height={56}
                       className="object-contain w-full h-full max-h-10"
@@ -283,23 +305,18 @@ function NavbarContent() {
                 </div>
 
                 <nav className="mt-6 space-y-2" aria-label="Mobile Navigation">
-                  {navLinks.map((link) => {
-                    const active = isLinkActive(link.href);
-                    return (
-                      <Link
+                  <Suspense fallback={null}>
+                    {navLinks.map((link) => (
+                      <NavLink
                         key={link.name}
                         href={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`block text-base font-semibold px-4 py-3 rounded-xl transition-all ${
-                          active
-                            ? "bg-luxe-rose text-white shadow-md"
-                            : "text-gray-800 hover:bg-pink-50 hover:text-luxe-rose"
-                        }`}
+                        className="block text-base font-semibold px-4 py-3 rounded-xl transition-all text-gray-800 hover:bg-pink-50 hover:text-luxe-rose"
+                        activeClassName="bg-luxe-rose text-white shadow-md"
                       >
                         {link.name}
-                      </Link>
-                    );
-                  })}
+                      </NavLink>
+                    ))}
+                  </Suspense>
 
                   {isAdmin && (
                     <Link
@@ -329,17 +346,11 @@ function NavbarContent() {
       {/* Quick Search Modal */}
       {searchOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4">
-          <div
-            className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl relative animate-fade-in border border-pink-100"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Search products modal"
-          >
+          <div className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl relative animate-fade-in border border-pink-100">
             <button
               type="button"
               onClick={() => setSearchOpen(false)}
               className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Close search modal"
             >
               <X className="w-5 h-5" />
             </button>

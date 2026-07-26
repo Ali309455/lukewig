@@ -3,13 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, ShieldCheck, CreditCard, Truck, ArrowLeft } from "lucide-react";
+import { CheckCircle2, ShieldCheck, CreditCard, Truck, ArrowLeft, AlertCircle } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import orderService from "@/services/OrderService";
 
 export default function CheckoutPage() {
   const { cartItems, grandTotal, subtotal, shippingFee, discountAmount, clearCart } = useCart();
+  const { user } = useAuth();
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [orderId, setOrderId] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -28,10 +34,90 @@ export default function CheckoutPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePlaceOrder = (e) => {
+  const validateForm = () => {
+    const missing = [];
+    if (!formData.firstName.trim()) missing.push("First Name");
+    if (!formData.lastName.trim()) missing.push("Last Name");
+    if (!formData.email.trim()) missing.push("Email");
+    if (!formData.phone.trim()) missing.push("Phone");
+    if (!formData.address.trim()) missing.push("Address");
+    if (!formData.city.trim()) missing.push("City");
+    if (!formData.zip.trim()) missing.push("Zip Code");
+    if (paymentMethod === "card") {
+      if (!formData.cardNumber.trim()) missing.push("Card Number");
+      if (!formData.expiry.trim()) missing.push("Expiry");
+      if (!formData.cvv.trim()) missing.push("CVV");
+    }
+    if (missing.length > 0) {
+      setErrorMsg(`Missing required fields: ${missing.join(", ")}`);
+      return false;
+    }
+    return true;
+  };
+
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    setOrderPlaced(true);
-    clearCart();
+    setErrorMsg("");
+
+    if (!validateForm()) {
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      setErrorMsg("Your cart is empty");
+      return;
+    }
+
+    if (!user) {
+      setErrorMsg("Please sign in to place an order");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const orderData = {
+        userId: user.uid,
+        userName: user.displayName || "",
+        email: formData.email,
+        phone: formData.phone,
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address,
+          city: formData.city,
+          zip: formData.zip,
+        },
+        items: cartItems.map((item) => ({
+          productId: item.productId,
+          name: item.name,
+          price: item.price,
+          size: item.size,
+          image: item.image,
+          qty: item.qty,
+          itemType: item.itemType || "product",
+        })),
+        subtotal,
+        discountAmount,
+        shippingFee,
+        total: grandTotal,
+        paymentMethod,
+        paymentStatus: "Pending",
+        orderStatus: "Pending",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const createdOrder = await orderService.createOrder(orderData);
+      setOrderId(createdOrder.id);
+      setOrderPlaced(true);
+      clearCart();
+    } catch (error) {
+      console.error("Order placement failed:", error);
+      setErrorMsg(error.message || "Failed to place order. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (orderPlaced) {
@@ -40,20 +126,21 @@ export default function CheckoutPage() {
         <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-lg animate-bounce">
           <CheckCircle2 className="w-12 h-12" />
         </div>
-        <h1 className="font-serif text-4xl font-extrabold text-gray-900">🎉 Order Placed Successfully!</h1>
+        <h1 className="font-serif text-4xl font-extrabold text-gray-900">Order Placed Successfully!</h1>
         <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
           Thank you for shopping with Luxe Hair! Your order confirmation has been sent to{" "}
           <strong className="text-gray-900">{formData.email || "your email"}</strong>.
         </p>
-        <div className="p-4 bg-pink-50 rounded-2xl border border-pink-100 max-w-sm mx-auto text-xs text-gray-600 space-y-1">
-          <p>Order Reference: <strong className="text-luxe-rose">#LX-{Math.floor(100000 + Math.random() * 900000)}</strong></p>
-          <p>Estimated Delivery: <strong>2 - 4 Business Days</strong></p>
-        </div>
+            <div className="p-4 bg-pink-50 rounded-2xl border border-pink-100 max-w-sm mx-auto text-xs text-gray-600 space-y-1">
+              <p>Order Reference: <strong className="text-luxe-rose">#LX-{orderId?.slice(-8)}</strong></p>
+              <p>Payment Method: <strong>Cash on Delivery</strong></p>
+              <p>Estimated Delivery: <strong>2 - 4 Business Days</strong></p>
+            </div>
         <Link
           href="/"
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-luxe-rose text-white font-semibold text-xs shadow-lg hover:bg-luxe-rose-dark transition-all"
         >
-          Return To Home Store
+          <span>Return To Home Store</span>
         </Link>
       </div>
     );
@@ -218,7 +305,6 @@ export default function CheckoutPage() {
                 <div>
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Card Number</label>
                   <input
-                    required
                     name="cardNumber"
                     value={formData.cardNumber}
                     onChange={handleChange}
@@ -230,7 +316,6 @@ export default function CheckoutPage() {
                   <div>
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Expiry (MM/YY)</label>
                     <input
-                      required
                       name="expiry"
                       value={formData.expiry}
                       onChange={handleChange}
@@ -241,7 +326,6 @@ export default function CheckoutPage() {
                   <div>
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">CVV Security</label>
                     <input
-                      required
                       name="cvv"
                       value={formData.cvv}
                       onChange={handleChange}
@@ -301,11 +385,26 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            {errorMsg && (
+              <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl">
+                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-red-700 font-medium">{errorMsg}</p>
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all"
+              disabled={isProcessing}
+              className="w-full py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Complete Order (${grandTotal.toFixed(2)})
+              {isProcessing ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                `Complete Order ($${grandTotal.toFixed(2)})`
+              )}
             </button>
 
             <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400 text-center">
