@@ -17,6 +17,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import productService from "@/services/ProductService";
 import bundleService from "@/services/BundleService";
+import saleService from "@/services/SaleService";
 import orderService, { ORDER_STATUSES } from "@/services/OrderService";
 import { SIZE_KEYS, calcDiscountedPrice } from "@/components/admin/common/constants";
 import ProductForm from "@/components/admin/products/ProductForm";
@@ -39,6 +40,21 @@ const EMPTY_FORM = {
   sizes: SIZE_KEYS.map((size) => ({ size, price: "", stock: "" })),
   details: { hairType: "", density: "", capSize: "", laceType: "" },
   images: [],
+};
+
+const EMPTY_SALE_FORM = {
+  title: "",
+  saleType: "flash",
+  category: "",
+  promoCode: "",
+  discountPercent: 0,
+  startDate: "",
+  endDate: "",
+  active: false,
+  showInHeader: false,
+  bannerText: "",
+  noteText: "",
+  buttonText: "",
 };
 
 const EMPTY_BUNDLE_FORM = {
@@ -79,11 +95,12 @@ export default function AdminDashboardPage() {
   const [orderUpdating, setOrderUpdating] = useState(null);
 
   // Sale state
-  const [saleForm, setSaleForm] = useState({
-    bannerText: "FREE SHIPPING ON ORDERS OVER $199 ✨ USE CODE LUXE20 FOR EXTRA 20% OFF",
-    discountPercent: 20,
-    active: true,
-  });
+  const [saleList, setSaleList] = useState([]);
+  const [saleLoading, setSaleLoading] = useState(true);
+  const [saleSubmitting, setSaleSubmitting] = useState(false);
+  const [editingSale, setEditingSale] = useState(null);
+  const [saleForm, setSaleForm] = useState(EMPTY_SALE_FORM);
+  const [saleSearchTerm, setSaleSearchTerm] = useState("");
 
   // Notifications
   const [notification, setNotification] = useState(null);
@@ -132,10 +149,23 @@ export default function AdminDashboardPage() {
     }
   }, [notify]);
 
+  const loadSales = useCallback(async () => {
+    try {
+      setSaleLoading(true);
+      const sales = await saleService.getSales();
+      setSaleList(sales);
+    } catch (err) {
+      notify(err.message, "error");
+    } finally {
+      setSaleLoading(false);
+    }
+  }, [notify]);
+
   useEffect(() => {
     loadProducts();
     loadBundles();
-  }, [loadProducts, loadBundles]);
+    loadSales();
+  }, [loadProducts, loadBundles, loadSales]);
 
   useEffect(() => {
     if (activeTab === "orders") loadOrders();
@@ -374,10 +404,109 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // Sale handler
-  const handleUpdateSale = (e) => {
+  // Sale handlers
+  const resetSaleForm = () => {
+    setSaleForm(EMPTY_SALE_FORM);
+    setEditingSale(null);
+  };
+
+  const buildSaleObj = (f) => ({
+    title: f.title.trim(),
+    saleType: f.saleType,
+    category: f.saleType === "category" ? f.category : "",
+    promoCode: f.promoCode.trim().toUpperCase(),
+    discountPercent: Number(f.discountPercent) || 0,
+    startDate: f.startDate || null,
+    endDate: f.endDate || null,
+    active: f.active,
+    showInHeader: f.showInHeader,
+    bannerText: f.bannerText.trim(),
+    noteText: f.noteText.trim(),
+    buttonText: f.buttonText.trim(),
+  });
+
+  const handleAddSale = async (e) => {
     e.preventDefault();
-    notify("Flash Sale campaign launched sitewide!");
+    setSaleSubmitting(true);
+    try {
+      const saleObj = buildSaleObj(saleForm);
+      await saleService.createSale(saleObj);
+      await loadSales();
+      notify(`Sale campaign "${saleForm.title}" created!`);
+      resetSaleForm();
+    } catch (err) {
+      notify(err.message, "error");
+    } finally {
+      setSaleSubmitting(false);
+    }
+  };
+
+  const handleEditSaleClick = (sale) => {
+    setEditingSale(sale);
+    setSaleForm({
+      title: sale.title || "",
+      saleType: sale.saleType || "flash",
+      category: sale.category || "",
+      promoCode: sale.promoCode || "",
+      discountPercent: sale.discountPercent ?? 0,
+      startDate: sale.startDate || "",
+      endDate: sale.endDate || "",
+      active: sale.active ?? false,
+      showInHeader: sale.showInHeader ?? false,
+      bannerText: sale.bannerText || "",
+      noteText: sale.noteText || "",
+      buttonText: sale.buttonText || "",
+    });
+    document.getElementById("sale-form-card")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleUpdateSale = async (e) => {
+    e.preventDefault();
+    setSaleSubmitting(true);
+    try {
+      const saleObj = buildSaleObj(saleForm);
+      await saleService.updateSale(editingSale.id, saleObj);
+      await loadSales();
+      notify("Sale campaign updated successfully.");
+      resetSaleForm();
+    } catch (err) {
+      notify(err.message, "error");
+    } finally {
+      setSaleSubmitting(false);
+    }
+  };
+
+  const handleDeleteSale = async (id) => {
+    try {
+      await saleService.deleteSale(id);
+      await loadSales();
+      notify("Sale campaign removed.");
+    } catch (err) {
+      notify(err.message, "error");
+    }
+  };
+
+  const handleToggleSaleActive = async (id, active) => {
+    try {
+      await saleService.toggleSaleStatus(id, active);
+      await loadSales();
+      notify(active ? "Sale campaign activated." : "Sale campaign deactivated.");
+    } catch (err) {
+      notify(err.message, "error");
+    }
+  };
+
+  const handleSaleSearch = async (term) => {
+    setSaleSearchTerm(term);
+    try {
+      setSaleLoading(true);
+      const results = await saleService.searchSales(term);
+      setSaleList(results);
+    } catch (err) {
+      notify(err.message, "error");
+    } finally {
+      setSaleLoading(false);
+    }
   };
 
   const TabBtn = ({ id, label }) => (
@@ -444,7 +573,7 @@ export default function AdminDashboardPage() {
         {[
           { label: "Total Sales", value: "$24,850", sub: "+18.4% this month", icon: <DollarSign className="w-5 h-5 text-emerald-500" />, valueClass: "text-gray-900" },
           { label: "Products", value: productList.length, sub: "Catalog Items", icon: <Package className="w-5 h-5 text-luxe-rose" />, valueClass: "text-gray-900" },
-          { label: "Active Sale", value: saleForm.active ? `${saleForm.discountPercent}% OFF` : "OFF", sub: "Sitewide Flash", icon: <Tag className="w-5 h-5 text-luxe-gold" />, valueClass: "text-luxe-rose" },
+          { label: "Active Sale", value: (saleList.find((s) => s.active)?.discountPercent || "No") + "% OFF", sub: saleList.filter((s) => s.active).length + " Active Campaigns", icon: <Tag className="w-5 h-5 text-luxe-gold" />, valueClass: "text-luxe-rose" },
           { label: "Bundle Deals", value: bundleList.length, sub: "Active Packages", icon: <Package className="w-5 h-5 text-indigo-500" />, valueClass: "text-gray-900" },
         ].map(({ label, value, sub, icon, valueClass }) => (
           <div key={label} className="bg-white p-5 rounded-3xl shadow-sm border border-pink-100 space-y-2">
@@ -520,11 +649,22 @@ export default function AdminDashboardPage() {
       )}
 
       {activeTab === "sales" && (
-        <SaleManagerSection
-          saleForm={saleForm}
-          setSaleForm={setSaleForm}
-          onUpdateSale={handleUpdateSale}
-        />
+        <div id="sale-form-card">
+          <SaleManagerSection
+            saleList={saleList}
+            saleForm={saleForm}
+            setSaleForm={setSaleForm}
+            onSubmit={editingSale ? handleUpdateSale : handleAddSale}
+            editingSale={editingSale}
+            onCancel={resetSaleForm}
+            submitting={saleSubmitting}
+            searchTerm={saleSearchTerm}
+            onSearch={handleSaleSearch}
+            onEdit={handleEditSaleClick}
+            onDelete={handleDeleteSale}
+            onToggleActive={handleToggleSaleActive}
+          />
+        </div>
       )}
 
       {activeTab === "bundles" && (

@@ -293,6 +293,10 @@ class ProductService {
         product.images?.[0]?.downloadURL ||
         product.images?.[0] ||
         null,
+      sizes: (product.sizes || []).map((s) => ({
+        ...s,
+        stock: s.stock ?? 50,
+      })),
     };
   }
 }

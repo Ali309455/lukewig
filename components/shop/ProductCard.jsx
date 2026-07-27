@@ -5,15 +5,35 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star, ShoppingBag, Eye, Heart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { user } = useAuth();
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const currentVariant = product.sizes && product.sizes.length > 0
     ? product.sizes[selectedSizeIndex]
     : { size: '20"', price: product.price, image: product.image };
+
+  const wishlisted = isInWishlist(product.id);
+
+  const handleWishlistToggle = async () => {
+    if (!user) return;
+    if (wishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist({
+        id: product.id,
+        name: product.name,
+        category: product.category || "",
+        price: currentVariant.price,
+        image: currentVariant.image || product.image,
+      });
+    }
+  };
 
   return (
     <div className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 border border-pink-100/80 flex flex-col justify-between h-full relative overflow-hidden">
@@ -28,11 +48,11 @@ export default function ProductCard({ product }) {
       {/* Wishlist Button */}
       <button
         type="button"
-        onClick={() => setIsWishlisted(!isWishlisted)}
+        onClick={handleWishlistToggle}
         className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-luxe-rose hover:bg-white transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
-        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
       >
-        <Heart className={`w-4 h-4 ${isWishlisted ? "fill-luxe-rose text-luxe-rose" : ""}`} />
+        <Heart className={`w-4 h-4 ${wishlisted ? "fill-luxe-rose text-luxe-rose" : ""}`} />
       </button>
 
       {/* Product Image Box - Perfectly Centered & Uniform Aspect Ratio */}

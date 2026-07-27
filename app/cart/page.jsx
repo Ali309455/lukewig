@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag, Truck } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag, Truck, CheckCircle2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
@@ -19,15 +19,17 @@ export default function CartPage() {
     grandTotal,
     applyPromoCode,
     promoCode,
+    clearPromo,
   } = useCart();
 
   const [inputCode, setInputCode] = useState("");
   const [promoMessage, setPromoMessage] = useState(null);
 
-  const handleApplyPromo = (e) => {
+  const handleApplyPromo = async (e) => {
     e.preventDefault();
     if (!inputCode.trim()) return;
-    const res = applyPromoCode(inputCode);
+    setPromoMessage(null);
+    const res = await applyPromoCode(inputCode);
     setPromoMessage(res);
   };
 
@@ -75,7 +77,7 @@ export default function CartPage() {
           <span className="flex items-center gap-1.5 text-gray-800">
             <Truck className="w-4 h-4 text-luxe-rose" />
             {remainingForFreeShipping === 0 ? (
-              <strong className="text-emerald-600">🎉 Congratulations! You unlocked FREE Express Shipping!</strong>
+              <strong className="text-emerald-600">Congratulations! You unlocked FREE Express Shipping!</strong>
             ) : (
               <span>Add <strong className="text-luxe-rose">${remainingForFreeShipping}</strong> more for FREE Shipping!</span>
             )}
@@ -184,32 +186,50 @@ export default function CartPage() {
               Order Summary
             </h3>
 
-            {/* Promo Code Form */}
-            <form onSubmit={handleApplyPromo} className="space-y-2">
+            {/* Promo Code Section */}
+            <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
                 Promo / Coupon Code
               </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Try LUXE20"
-                  value={inputCode}
-                  onChange={(e) => setInputCode(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-luxe-rose"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-luxe-dark text-white rounded-xl text-xs font-semibold hover:bg-black transition-colors"
-                >
-                  Apply
-                </button>
-              </div>
+              {promoCode ? (
+                <div className="flex items-center justify-between p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="text-xs font-bold text-emerald-700">
+                      {promoCode} ✓
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { clearPromo(); setPromoMessage(null); }}
+                    className="text-[10px] text-emerald-500 hover:text-red-500 font-semibold underline transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleApplyPromo} className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Try LUXE20"
+                    value={inputCode}
+                    onChange={(e) => setInputCode(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-luxe-dark text-white rounded-xl text-xs font-semibold hover:bg-black transition-colors"
+                  >
+                    Apply
+                  </button>
+                </form>
+              )}
               {promoMessage && (
                 <p className={`text-[11px] font-semibold ${promoMessage.success ? "text-emerald-600" : "text-red-500"}`}>
                   {promoMessage.message}
                 </p>
               )}
-            </form>
+            </div>
 
             {/* Price Calculations */}
             <div className="space-y-3 text-xs border-t border-gray-100 pt-4 text-gray-600">

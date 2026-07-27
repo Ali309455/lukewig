@@ -35,6 +35,11 @@
   }
 }
 
+/* Text shadow for hero readability */
+.text-shadow-hero {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
 /* Glassmorphism utility */
 .glass-panel {
   background: rgba(255, 255, 255, 0.85);

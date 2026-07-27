@@ -6,6 +6,7 @@ import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import { CartProvider, useCart } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import { CheckCircle } from "lucide-react";
 
 function ToastNotification() {
@@ -34,11 +35,13 @@ export default function RootLayout({ children }) {
       <body className="flex flex-col min-h-screen">
         <AuthProvider>
           <CartProvider>
-            <AnnouncementBar />
-            <Navbar />
-            <main className="flex-grow">{children}</main>
-            <ToastNotification />
-            <Footer />
+            <WishlistProvider>
+              <AnnouncementBar />
+              <Navbar />
+              <main className="flex-grow">{children}</main>
+              <ToastNotification />
+              <Footer />
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

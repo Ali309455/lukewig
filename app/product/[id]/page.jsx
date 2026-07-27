@@ -66,7 +66,7 @@ export default function ProductDetailPage() {
         <div className="space-y-4">
           <div className="relative w-full h-[450px] sm:h-[540px] rounded-3xl overflow-hidden bg-[#f9f9fd] shadow-lg border border-pink-100">
             <Image
-              src={currentVariant.image || product.image}
+              src={product.image}
               alt={product.name}
               fill
               priority
@@ -92,7 +92,7 @@ export default function ProductDetailPage() {
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <Image src={s.image} alt={s.size} fill className="object-contain" />
+                  <Image src={product.image} alt={s.size} fill className="object-contain" />
                 </button>
               ))}
             </div>

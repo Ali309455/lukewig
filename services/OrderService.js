@@ -2,6 +2,7 @@ import { where, orderBy } from "firebase/firestore";
 import dbService from "./DBService";
 import productService from "./ProductService";
 import bundleService from "./BundleService";
+import saleService from "./SaleService";
 
 const ORDERS_COLLECTION = "orders";
 
@@ -60,6 +61,22 @@ class OrderService {
               );
             }
           }
+        }
+      }
+
+      // Validate promo code if provided
+      if (orderData.promoCode) {
+        const validation = await saleService.validatePromoCode(orderData.promoCode);
+        if (!validation.valid) {
+          throw new Error(validation.message || "Invalid promo code.");
+        }
+        const discountCalc = await saleService.calculateDiscount(
+          orderData.promoCode,
+          orderData.items || []
+        );
+        const mismatch = Math.abs(discountCalc.discountAmount - orderData.discountAmount) > 0.01;
+        if (mismatch) {
+          throw new Error("Discount amount mismatch. Please re-apply promo code.");
         }
       }
 

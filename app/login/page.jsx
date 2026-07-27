@@ -147,7 +147,7 @@ export default function LoginPage() {
             className="w-full py-3.5 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
-              <span className="animate-spin text-lg">⏳</span>
+              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
                 <UserCheck className="w-4 h-4" />

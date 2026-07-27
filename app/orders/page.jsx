@@ -35,7 +35,7 @@ function OrderCard({ order }) {
   const getPaymentStatusColor = (status) => {
     const statusMap = {
       "Paid": "bg-emerald-50 text-emerald-700 border-emerald-200",
-      "Pending": "bg-amber-50 text-amber-700 border-amber-200",
+      "Unpaid": "bg-amber-50 text-amber-700 border-amber-200",
       "Failed": "bg-red-50 text-red-700 border-red-200",
     };
     return statusMap[status] || "bg-gray-50 text-gray-700 border-gray-200";

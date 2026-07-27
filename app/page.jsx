@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Sparkles,
   Shield,
   Truck,
   Award,
@@ -28,7 +27,6 @@ export default function HomePage() {
     try {
       const products = await productService.getProducts();
       setProducts(products);
-      
     } catch (err) {
       console.log(err.message + "error");
     } finally {
@@ -39,92 +37,84 @@ export default function HomePage() {
   const loadBundles = useCallback(async () => {
     try {
       const bundles = await bundleService.getBundles();
-      console.log(bundles)
+      console.log(bundles);
       setbundles(bundles);
-      
     } catch (err) {
       console.log(err.message + "error");
-    } 
+    }
   }, []);
 
   useEffect(() => {
     loadProducts();
-    loadBundles()
+    loadBundles();
   }, []);
 
   return (
     <div className="space-y-16 lg:space-y-24">
-      {/* 1. HERO SECTION */}
-      <section className="relative bg-gradient-to-br from-[#fff8f9] via-[#ffeef3] to-[#fff8f8] pt-12 pb-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Copy */}
-            <div className="space-y-6 text-center lg:text-left z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-luxe-rose/10 text-luxe-rose text-xs font-bold tracking-widest uppercase border border-luxe-rose/20 shadow-sm">
-                <Sparkles className="w-4 h-4 text-luxe-gold" />
-                <span>VERSATILE BY VERSHA' — ONE WOMAN. EVERY LOOK.</span>
-              </div>
-
-              <h1 className="font-serif text-5xl sm:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1]">
-                Crown Your <br />
-                <span className="text-luxe-gold italic font-serif">
-                  Confidence
-                </span>
-              </h1>
-
-              <p className="text-gray-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
-                Luxurious 100% human hair wigs, HD Swiss lace closures, and
-                custom bundle deals designed for every woman and every look.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-                <Link
-                  href="/shop"
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
-                >
-                  <span>Shop Collection</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
-                <Link
-                  href="/shop?category=bundles"
-                  className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-luxe-rose text-luxe-rose hover:bg-luxe-rose hover:text-white font-semibold text-sm transition-all text-center"
-                >
-                  Browse Bundles
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Hero Image */}
-            <div className="relative flex justify-center">
-              <div className="w-[320px] h-[400px] sm:w-[420px] sm:h-[500px] relative rounded-3xl overflow-hidden shadow-2xl animate-float border-4 border-white/80">
-                <Image
-                  src="/hero.png"
-                  alt="Luxe Hair Model"
-                  fill
-                  priority
-                  className="object-cover object-top"
-                />
-              </div>
-              <div className="absolute -bottom-6 right-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-pink-100 hidden sm:flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-luxe-gold/20 text-luxe-gold flex items-center justify-center font-bold">
-                  ★
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-gray-900">
-                    4.9 / 5 Rating
-                  </p>
-                  <p className="text-[11px] text-gray-500">
-                    Over 5,000+ Happy Clients
-                  </p>
-                </div>
-              </div>
-            </div>
+      {/* 1. HERO BANNER */}
+      <section className="relative h-[125%] w-full min-h-[55vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[80vh] overflow-hidden">
+        <Image
+          src="/images/bannerimage.png"
+          alt="Luxe Hair - Premium Wigs Collection"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center h-[125%] w-full"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 to-black/35" />
+        <div className="absolute inset-0 flex flex-col gap-6 sm:gap-10 items-center justify-center px-4 py-12">
+          <h1 className="text-center">
+            <span className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white block leading-tight text-shadow-hero">
+              Crown Your
+            </span>
+            <span className="text-luxe-gold italic font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold block leading-tight text-shadow-hero">
+              Confidence
+            </span>
+          </h1> 
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto">
+            <Link
+              href="/shop"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 min-h-[48px]"
+            >
+              <span>Shop Collection</span>
+              <ArrowRight className="w-4 h-4 flex-shrink-0" />
+            </Link>
+            <Link
+              href="/shop?category=bundles"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border-2 border-luxe-rose text-luxe-rose hover:bg-luxe-rose hover:text-white font-semibold text-sm transition-all text-center min-h-[48px] flex items-center justify-center"
+            >
+              Browse Bundles
+            </Link>
           </div>
+        
         </div>
+
+        
+        
       </section>
 
-      {/* 2. FEATURES BANNER */}
+      {/* 2. CTA SECTION
+      <section className="py-12 lg:py-16 bg-gradient-to-br from-[#fff8f9] via-[#ffeef3] to-[#fff8f8]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/shop"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+            >
+              <span>Shop Collection</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/shop?category=bundles"
+              className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-luxe-rose text-luxe-rose hover:bg-luxe-rose hover:text-white font-semibold text-sm transition-all text-center"
+            >
+              Browse Bundles
+            </Link>
+          </div>
+        </div>
+      </section> */}
+
+      {/* 3. FEATURES BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100/60 hover:-translate-y-1 transition-all text-center space-y-3">
@@ -177,7 +167,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. TRENDING WIGS SECTION */}
+      {/* 4. TRENDING WIGS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <span className="text-xs font-bold text-luxe-rose uppercase tracking-widest">
@@ -213,7 +203,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. BEST SELLING BUNDLE DEALS */}
+      {/* 5. BEST SELLING BUNDLE DEALS */}
       <section className="bg-gradient-to-r from-pink-50/50 via-white to-amber-50/50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
@@ -236,7 +226,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. CUSTOMER REVIEWS */}
+      {/* 6. CUSTOMER REVIEWS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-2">
           <span className="text-xs font-bold text-luxe-rose uppercase tracking-widest">

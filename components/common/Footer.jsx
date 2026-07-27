@@ -34,11 +34,11 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
         
         {/* Brand Info */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center rounded-3xl bg-white/10 p-3 sm:p-4 border border-white/15 shadow-inner w-64 sm:w-72 h-20 sm:h-24 overflow-hidden">
+        <div className="space-y-4 sm:col-span-2 md:col-span-1 text-center sm:text-left">
+          <div className="flex items-center justify-center mx-auto sm:mx-0 rounded-full bg-white/10 p-1.5 sm:p-2 border border-white/15 shadow-inner w-[4rem] h-[4rem] sm:w-[5rem] sm:h-[5rem] md:w-[5.5rem] md:h-[5.5rem] overflow-hidden">
             <Image
               src="/images/logo.png"
               alt="VERSATILE BY VERSHA' Logo"
@@ -53,14 +53,14 @@ export default function Footer() {
           <p className="text-gray-400 text-xs leading-relaxed">
             Crown your confidence with luxury virgin hair wigs & HD Swiss lace closures designed to deliver ultimate elegance and style.
           </p>
-          <div className="flex space-x-4 pt-2">
-            <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Instagram">
+          <div className="flex justify-center sm:justify-start gap-3 pt-2">
+            <a href="#" className="min-w-[44px] min-h-[44px] rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Instagram">
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Facebook">
+            <a href="#" className="min-w-[44px] min-h-[44px] rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Facebook">
               <Facebook className="w-4 h-4" />
             </a>
-            <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Twitter">
+            <a href="#" className="min-w-[44px] min-h-[44px] rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-luxe-rose hover:text-white transition-colors" aria-label="Twitter">
               <Twitter className="w-4 h-4" />
             </a>
           </div>

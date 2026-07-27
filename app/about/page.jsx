@@ -36,7 +36,7 @@ export default function AboutPage() {
             </div>
 
             <div className="relative flex justify-center">
-              <div className="w-[320px] h-[400px] sm:w-[380px] sm:h-[480px] relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+              <div className="w-full max-w-[380px] h-[350px] sm:h-[480px] relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
                   src="/images/hero.png"
                   alt="Luxe Hair Craftsmanship"
