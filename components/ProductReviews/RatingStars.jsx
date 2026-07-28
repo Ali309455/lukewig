@@ -49,9 +49,9 @@ export default function RatingStars({
             onClick={() => interactive && onChange && onChange(starValue)}
             onMouseEnter={() => interactive && setHoverRating(starValue)}
             onMouseLeave={() => interactive && setHoverRating(0)}
-            className={`transition-all duration-150 focus:outline-none ${
+            className={`transition-all duration-150 focus:outline-hidden ${
               interactive
-                ? "cursor-pointer transform hover:scale-125 focus:ring-2 focus:ring-luxe-rose rounded-sm p-0.5"
+                ? "cursor-pointer transform hover:scale-125 focus:ring-2 focus:ring-luxe-rose rounded-xs p-0.5"
                 : "cursor-default"
             }`}
             aria-label={interactive ? `Rate ${starValue} star${starValue > 1 ? "s" : ""}` : undefined}

@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         <title>VERSATILE BY VERSHA' | One Woman. Every Look.</title>
         <meta
           name="description"
-          content="Shop 100% HD Swiss lace human hair wigs, body wave, deep wave, and luxury bundle deals. VERSATILE BY VERSHA' — One Woman. Every Look."
+          content="Shop 100% HD Swiss lace human hair wigs, body wave, deep wave, and luxury bundle deals from VERSATILE BY VERSHA' — One Woman. Every Look."
         />
       </head>
       <body className="flex flex-col min-h-screen">
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             <WishlistProvider>
               <AnnouncementBar />
               <Navbar />
-              <main className="flex-grow">{children}</main>
+              <main className="grow">{children}</main>
               <ToastNotification />
               <Footer />
             </WishlistProvider>

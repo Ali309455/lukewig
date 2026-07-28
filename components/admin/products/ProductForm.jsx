@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { ChevronDown } from "lucide-react";
-import { CATEGORIES, SIZE_KEYS, inputCls, calcDiscountedPrice } from "@/components/admin/common/constants";
+import { ChevronDown, PlusCircle, X } from "lucide-react";
+import { CATEGORIES, inputCls, calcDiscountedPrice } from "@/components/admin/common/constants";
 import Field from "@/components/admin/common/Field";
 import Section from "@/components/admin/common/Section";
 import ToggleSwitch from "@/components/admin/common/ToggleSwitch";
@@ -39,6 +39,32 @@ export default function ProductForm({ form, setForm, editingProduct, onSubmit, s
       sizes[idx] = { ...sizes[idx], stock: value };
       return { ...prev, sizes };
     });
+
+  const setSizeComparePrice = (idx, value) =>
+    setForm((prev) => {
+      const sizes = [...prev.sizes];
+      sizes[idx] = { ...sizes[idx], comparePrice: value };
+      return { ...prev, sizes };
+    });
+
+  const setSizeName = (idx, value) =>
+    setForm((prev) => {
+      const sizes = [...prev.sizes];
+      sizes[idx] = { ...sizes[idx], size: value };
+      return { ...prev, sizes };
+    });
+
+  const addSize = () =>
+    setForm((prev) => ({
+      ...prev,
+      sizes: [...prev.sizes, { size: "", price: "", comparePrice: "", stock: "" }],
+    }));
+
+  const removeSize = (idx) =>
+    setForm((prev) => ({
+      ...prev,
+      sizes: prev.sizes.filter((_, i) => i !== idx),
+    }));
 
   return (
     <form onSubmit={onSubmit} className="space-y-5 text-xs">
@@ -150,20 +176,30 @@ export default function ProductForm({ form, setForm, editingProduct, onSubmit, s
 
       <Section title="Variant Pricing & Stock">
         <div className="space-y-2">
-          <div className="grid grid-cols-12 gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
-            <div className="col-span-3">Size</div>
-            <div className="col-span-4 text-center">Price ($)</div>
-            <div className="col-span-5 text-center">Stock</div>
+          <div className="grid grid-cols-1 gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">
+            <div className="grid grid-cols-12 gap-2">
+              <div className="col-span-2">Size</div>
+              <div className="col-span-2 text-center">Price ($)</div>
+              <div className="col-span-3 text-center">Compare At ($)</div>
+              <div className="col-span-3 text-center">Stock</div>
+              <div className="col-span-2" />
+            </div>
           </div>
           {form.sizes.map((s, i) => (
             <div
-              key={s.size}
-              className="grid grid-cols-12 gap-2 items-center rounded-xl border border-pink-100 bg-white p-2 sm:p-2.5 shadow-sm"
+              key={i}
+              className="grid grid-cols-12 gap-2 items-center rounded-xl border border-pink-100 bg-white p-2 sm:p-2.5 shadow-xs"
             >
-              <div className="col-span-3 font-bold text-gray-700 text-[11px] sm:text-xs truncate">
-                {s.size}
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  placeholder='e.g. 20"'
+                  value={s.size}
+                  onChange={(e) => setSizeName(i, e.target.value)}
+                  className="w-full px-1.5 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
+                />
               </div>
-              <div className="col-span-4 relative">
+              <div className="col-span-2 relative">
                 <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px]">
                   $
                 </span>
@@ -174,10 +210,24 @@ export default function ProductForm({ form, setForm, editingProduct, onSubmit, s
                   placeholder="0"
                   value={s.price}
                   onChange={(e) => setSizePrice(i, e.target.value)}
-                  className="w-full pl-4 pr-1 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full pl-4 pr-1 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
-              <div className="col-span-5">
+              <div className="col-span-3 relative">
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px]">
+                  $
+                </span>
+                <input
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  placeholder="0"
+                  value={s.comparePrice}
+                  onChange={(e) => setSizeComparePrice(i, e.target.value)}
+                  className="w-full pl-4 pr-1 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs text-gray-400 line-through focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
+                />
+              </div>
+              <div className="col-span-3">
                 <input
                   type="number"
                   min={0}
@@ -185,11 +235,29 @@ export default function ProductForm({ form, setForm, editingProduct, onSubmit, s
                   placeholder="0"
                   value={s.stock}
                   onChange={(e) => setSizeStock(i, e.target.value)}
-                  className="w-full px-2 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-2 py-1.5 border border-pink-200 rounded-lg text-center text-[11px] sm:text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
+              </div>
+              <div className="col-span-2 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => removeSize(i)}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                  title="Remove size"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
             </div>
           ))}
+          <button
+            type="button"
+            onClick={addSize}
+            className="flex items-center gap-1.5 text-xs font-semibold text-luxe-rose hover:text-luxe-rose-dark transition-colors px-1 pt-1"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Add Size Variant
+          </button>
         </div>
       </Section>
 

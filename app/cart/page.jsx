@@ -72,7 +72,7 @@ export default function CartPage() {
       </div>
 
       {/* Free Shipping Progress Indicator */}
-      <div className="bg-gradient-to-r from-pink-50 to-amber-50 p-4 rounded-2xl border border-pink-100 space-y-2">
+      <div className="bg-linear-to-r from-pink-50 to-amber-50 p-4 rounded-2xl border border-pink-100 space-y-2">
         <div className="flex items-center justify-between text-xs font-semibold">
           <span className="flex items-center gap-1.5 text-gray-800">
             <Truck className="w-4 h-4 text-luxe-rose" />
@@ -86,7 +86,7 @@ export default function CartPage() {
         </div>
         <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-luxe-rose to-luxe-gold transition-all duration-500"
+            className="h-full bg-linear-to-r from-luxe-rose to-luxe-gold transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -96,7 +96,7 @@ export default function CartPage() {
         
         {/* Cart Items Table */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-3xl p-6 shadow-sm border border-pink-100 overflow-x-auto">
+          <div className="bg-white rounded-3xl p-6 shadow-xs border border-pink-100 overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[500px]">
               <thead>
                 <tr className="border-b border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">
@@ -115,7 +115,7 @@ export default function CartPage() {
                     {/* Item Image & Title */}
                     <td className="py-4 pr-4">
                       <div className="flex items-center gap-3">
-                        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-100">
+                        <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-100">
                           <Image src={item.image} alt={item.name} fill className="object-cover" />
                         </div>
                         <div>
@@ -181,7 +181,7 @@ export default function CartPage() {
 
         {/* Order Summary Sidebar */}
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-pink-100 space-y-6">
+          <div className="bg-white p-6 rounded-3xl shadow-xs border border-pink-100 space-y-6">
             <h3 className="font-serif text-2xl font-bold text-gray-900 border-b border-gray-100 pb-3">
               Order Summary
             </h3>
@@ -211,10 +211,10 @@ export default function CartPage() {
                 <form onSubmit={handleApplyPromo} className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Try LUXE20"
+                    placeholder="Try VERSHA20"
                     value={inputCode}
                     onChange={(e) => setInputCode(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                   />
                   <button
                     type="submit"

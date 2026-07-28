@@ -61,7 +61,7 @@ export default function RestockModal({ product, onClose, onRestocked }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-xs"
         onClick={onClose}
       />
       <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-pink-100 overflow-hidden animate-fade-in">
@@ -100,7 +100,7 @@ export default function RestockModal({ product, onClose, onRestocked }) {
                     onClick={() => handleSizeChange(s.size)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                       isSelected
-                        ? "bg-luxe-rose text-white border-luxe-rose shadow-sm"
+                        ? "bg-luxe-rose text-white border-luxe-rose shadow-xs"
                         : "bg-white text-gray-700 border-pink-200 hover:border-luxe-rose"
                     }`}
                   >
@@ -138,7 +138,7 @@ export default function RestockModal({ product, onClose, onRestocked }) {
               required
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
-              className="w-full px-3.5 py-2.5 border border-pink-200 rounded-xl bg-white text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-luxe-rose transition-shadow"
+              className="w-full px-3.5 py-2.5 border border-pink-200 rounded-xl bg-white text-sm text-gray-800 focus:outline-hidden focus:ring-2 focus:ring-luxe-rose transition-shadow"
               placeholder="Enter stock quantity"
             />
           </div>

@@ -2,15 +2,15 @@
 
 export function ProductCardShimmer() {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-pink-100/60 overflow-hidden space-y-4">
+    <div className="bg-white rounded-2xl p-4 shadow-xs border border-pink-100/60 overflow-hidden space-y-4">
       <div className="w-full h-64 rounded-xl shimmer-box" />
       <div className="space-y-2">
-        <div className="w-1/3 h-3 rounded shimmer-box" />
-        <div className="w-3/4 h-5 rounded shimmer-box" />
-        <div className="w-1/2 h-4 rounded shimmer-box" />
+        <div className="w-1/3 h-3 rounded-sm shimmer-box" />
+        <div className="w-3/4 h-5 rounded-sm shimmer-box" />
+        <div className="w-1/2 h-4 rounded-sm shimmer-box" />
       </div>
       <div className="flex items-center justify-between pt-2">
-        <div className="w-1/3 h-6 rounded shimmer-box" />
+        <div className="w-1/3 h-6 rounded-sm shimmer-box" />
         <div className="w-24 h-9 rounded-full shimmer-box" />
       </div>
     </div>
@@ -39,12 +39,12 @@ export function ProductDetailsShimmer() {
         </div>
       </div>
       <div className="space-y-6">
-        <div className="w-1/4 h-4 rounded shimmer-box" />
-        <div className="w-3/4 h-8 rounded shimmer-box" />
-        <div className="w-1/3 h-6 rounded shimmer-box" />
+        <div className="w-1/4 h-4 rounded-sm shimmer-box" />
+        <div className="w-3/4 h-8 rounded-sm shimmer-box" />
+        <div className="w-1/3 h-6 rounded-sm shimmer-box" />
         <div className="w-full h-20 rounded-xl shimmer-box" />
         <div className="space-y-2">
-          <div className="w-1/3 h-4 rounded shimmer-box" />
+          <div className="w-1/3 h-4 rounded-sm shimmer-box" />
           <div className="flex gap-3">
             <div className="w-16 h-10 rounded-lg shimmer-box" />
             <div className="w-16 h-10 rounded-lg shimmer-box" />
@@ -60,8 +60,8 @@ export function ProductDetailsShimmer() {
 export function CartShimmer() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-6">
-      <div className="w-48 h-8 rounded shimmer-box mb-6" />
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-100 space-y-4">
+      <div className="w-48 h-8 rounded-sm shimmer-box mb-6" />
+      <div className="bg-white rounded-2xl p-6 shadow-xs border border-pink-100 space-y-4">
         <div className="w-full h-16 rounded-xl shimmer-box" />
         <div className="w-full h-16 rounded-xl shimmer-box" />
         <div className="w-full h-16 rounded-xl shimmer-box" />

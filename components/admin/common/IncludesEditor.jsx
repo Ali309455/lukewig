@@ -34,7 +34,7 @@ export default function IncludesEditor({ items, onChange }) {
             type="button"
             onClick={() => removeItem(idx)}
             disabled={items.length === 1}
-            className="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-xl border border-pink-200 text-red-400 hover:bg-red-50 disabled:opacity-30 transition-colors"
+            className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl border border-pink-200 text-red-400 hover:bg-red-50 disabled:opacity-30 transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>

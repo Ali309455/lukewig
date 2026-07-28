@@ -89,7 +89,7 @@ export default function ProductReviews({ productId, productName = "Product" }) {
       </div>
 
       {/* Aggregate Rating & Star Breakdown Grid */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-pink-100 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-pink-100 shadow-xs grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         
         {/* Left Big Rating Box */}
         <div className="md:col-span-5 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-pink-100 pb-6 md:pb-0 md:pr-6 text-center space-y-2">
@@ -114,7 +114,7 @@ export default function ProductReviews({ productId, productName = "Product" }) {
                 key={star}
                 type="button"
                 onClick={() => setSelectedStarFilter(selectedStarFilter === star ? 0 : star)}
-                className={`w-full flex items-center gap-3 text-xs group focus:outline-none rounded-lg p-1 transition-colors ${
+                className={`w-full flex items-center gap-3 text-xs group focus:outline-hidden rounded-lg p-1 transition-colors ${
                   selectedStarFilter === star ? "bg-pink-50" : "hover:bg-pink-50/50"
                 }`}
               >
@@ -191,7 +191,7 @@ export default function ProductReviews({ productId, productName = "Product" }) {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-luxe-rose shadow-xs cursor-pointer"
+            className="bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-hidden focus:ring-2 focus:ring-luxe-rose shadow-2xs cursor-pointer"
           >
             <option value="newest">Most Recent</option>
             <option value="highest">Highest Rated</option>

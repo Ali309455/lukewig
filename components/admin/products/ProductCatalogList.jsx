@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Package, Edit, Trash2, ImageIcon, Search } from "lucide-react";
 import productService from "@/services/ProductService";
-import { SIZE_KEYS } from "@/components/admin/common/constants";
 
 export default function ProductCatalogList({
   products,
@@ -16,7 +15,7 @@ export default function ProductCatalogList({
   notify,
 }) {
   return (
-    <div className="lg:col-span-3 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+    <div className="lg:col-span-3 bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="font-serif text-2xl font-bold text-gray-900">
           Current Catalog ({products.length})
@@ -28,7 +27,7 @@ export default function ProductCatalogList({
             placeholder="Search products…"
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
-            className="pl-8 pr-3.5 py-2 border border-pink-200 rounded-xl bg-white text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-luxe-rose transition-shadow placeholder:text-gray-300 w-44"
+            className="pl-8 pr-3.5 py-2 border border-pink-200 rounded-xl bg-white text-xs text-gray-800 focus:outline-hidden focus:ring-2 focus:ring-luxe-rose transition-shadow placeholder:text-gray-300 w-44"
           />
         </div>
       </div>
@@ -59,7 +58,7 @@ export default function ProductCatalogList({
               className="py-3.5 flex items-center justify-between gap-4"
             >
               <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-pink-50 flex-shrink-0 border border-pink-100">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-pink-50 shrink-0 border border-pink-100">
                   {p.image ? (
                     <Image
                       src={p.image}
@@ -116,7 +115,7 @@ export default function ProductCatalogList({
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   type="button"
                   onClick={() => onRestock(p)}
@@ -159,13 +158,13 @@ function ProductListSkeleton() {
           className="py-3.5 flex items-center justify-between gap-4"
         >
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-12 h-12 rounded-xl bg-pink-100 animate-pulse flex-shrink-0" />
+            <div className="w-12 h-12 rounded-xl bg-pink-100 animate-pulse shrink-0" />
             <div className="flex-1 space-y-2">
-              <div className="h-3.5 w-3/4 bg-pink-100 rounded animate-pulse" />
-              <div className="h-2.5 w-1/2 bg-pink-100 rounded animate-pulse" />
+              <div className="h-3.5 w-3/4 bg-pink-100 rounded-sm animate-pulse" />
+              <div className="h-2.5 w-1/2 bg-pink-100 rounded-sm animate-pulse" />
             </div>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="flex gap-2 shrink-0">
             <div className="w-8 h-8 rounded-lg bg-pink-100 animate-pulse" />
             <div className="w-8 h-8 rounded-lg bg-pink-100 animate-pulse" />
           </div>

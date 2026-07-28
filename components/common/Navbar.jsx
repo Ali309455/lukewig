@@ -57,7 +57,7 @@ function NavbarContent() {
     { name: "Shop All", href: "/shop" },
     { name: "HD Laces", href: "/shop?category=HD+Laces+%26+Closures" },
     { name: "Bundle Deals", href: "/shop?category=bundles" },
-    { name: "About Us", href: "/about" },
+    { name: "Meet the Owner", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -107,18 +107,18 @@ function NavbarContent() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-sm transition-all duration-200">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-xs transition-all duration-200">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between min-h-16 sm:min-h-20 py-1.5 sm:py-2">
             
             {/* Mobile: Hamburger + Logo grouped together */}
             <div className="flex items-center gap-1 sm:gap-3">
               {/* Mobile Hamburger Menu Toggle */}
-              <div className="flex items-center lg:hidden flex-shrink-0">
+              <div className="flex items-center lg:hidden shrink-0">
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-2.5 sm:p-3 rounded-xl text-gray-700 hover:text-luxe-rose hover:bg-pink-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  className="p-2.5 sm:p-3 rounded-xl text-gray-700 hover:text-luxe-rose hover:bg-pink-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                   aria-expanded={mobileMenuOpen}
                   aria-controls="mobile-menu-drawer"
                   aria-label={mobileMenuOpen ? "Close main navigation menu" : "Open main navigation menu"}
@@ -128,8 +128,8 @@ function NavbarContent() {
               </div>
 
               {/* Brand Logo */}
-              <div className="flex-shrink-0 flex items-center">
-                <Link href="/" className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose rounded-full transition-transform duration-300 hover:scale-105">
+              <div className="shrink-0 flex items-center">
+                <Link href="/" className="group block focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose rounded-full transition-transform duration-300 hover:scale-105">
                   <Image
                     src="/images/logo.png"
                     alt="VERSATILE BY VERSHA Logo"
@@ -147,12 +147,12 @@ function NavbarContent() {
               aria-label="Main Navigation"
               className="hidden lg:flex items-center gap-1 xl:gap-6 flex-wrap justify-center flex-1 mx-2 xl:mx-4"
             >
-              <Suspense fallback={<div className="h-6 w-48 bg-pink-50 animate-pulse rounded" />}>
+              <Suspense fallback={<div className="h-6 w-48 bg-pink-50 animate-pulse rounded-sm" />}>
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.name}
                     href={link.href}
-                    className="text-sm xl:text-base font-medium transition-colors duration-200 tracking-wide relative px-2.5 py-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose text-gray-700 hover:text-luxe-rose hover:bg-pink-50/40"
+                    className="text-sm xl:text-base font-medium transition-colors duration-200 tracking-wide relative px-2.5 py-2.5 rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose text-gray-700 hover:text-luxe-rose hover:bg-pink-50/40"
                     activeClassName="text-luxe-rose font-semibold bg-pink-50/70"
                   >
                     {link.name}
@@ -160,23 +160,15 @@ function NavbarContent() {
                 ))}
               </Suspense>
 
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-luxe-rose/10 text-luxe-rose border border-luxe-rose/30 hover:bg-luxe-rose hover:text-white transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Admin</span>
-                </Link>
-              )}
+              
             </nav>
 
             {/* Right Action Icons */}
-            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose"
                 aria-label="Search items"
               >
                 <Search className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -184,13 +176,13 @@ function NavbarContent() {
 
               <Link
                 href="/wishlist"
-                className="hidden sm:flex min-w-[44px] min-h-[44px] items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose"
+                className="hidden sm:flex min-w-[44px] min-h-[44px] items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors relative focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose"
                 title="Wishlist"
                 aria-label={`Wishlist with ${wishlistCount} items`}
               >
                 <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-luxe-rose text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                  <span className="absolute -top-0.5 -right-0.5 bg-luxe-rose text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-xs">
                     {wishlistCount > 9 ? "9+" : wishlistCount}
                   </span>
                 )}
@@ -198,12 +190,12 @@ function NavbarContent() {
 
               <Link
                 href="/cart"
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 hover:text-luxe-rose hover:bg-pink-50 rounded-full transition-colors relative group focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose"
                 aria-label={`Shopping cart with ${totalItemCount} items`}
               >
                 <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
                 {totalItemCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-luxe-rose text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-bounce">
+                  <span className="absolute top-0 right-0 bg-luxe-rose text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-xs animate-bounce">
                     {totalItemCount}
                   </span>
                 )}
@@ -216,7 +208,7 @@ function NavbarContent() {
                     <button
                       type="button"
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="min-w-[44px] min-h-[44px] flex items-center justify-center gap-1.5 p-1.5 rounded-full bg-luxe-rose-light text-luxe-rose-dark border border-luxe-rose-soft hover:bg-luxe-rose hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose"
+                      className="min-w-[44px] min-h-[44px] flex items-center justify-center gap-1.5 p-1.5 rounded-full bg-luxe-rose-light text-luxe-rose-dark border border-luxe-rose-soft hover:bg-luxe-rose hover:text-white transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose"
                       aria-expanded={userDropdownOpen}
                       aria-label="User profile menu"
                     >
@@ -268,7 +260,7 @@ function NavbarContent() {
                 ) : (
                   <Link
                     href="/login"
-                    className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-luxe-rose min-h-[44px]"
+                    className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-luxe-rose min-h-[44px]"
                   >
                     <User className="w-4 h-4" />
                     <span className="hidden xs:inline">Sign In</span>
@@ -352,7 +344,7 @@ function NavbarContent() {
 
       {/* Quick Search Modal */}
       {searchOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-start justify-center pt-20 px-4">
           <div className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl relative animate-fade-in border border-pink-100">
             <button
               type="button"
@@ -372,7 +364,7 @@ function NavbarContent() {
               <input
                 type="text"
                 placeholder="Type to search wigs & extensions..."
-                className="w-full pl-12 pr-4 py-3.5 border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-luxe-rose text-sm text-gray-800 shadow-sm"
+                className="w-full pl-12 pr-4 py-3.5 border border-pink-200 rounded-2xl focus:outline-hidden focus:ring-2 focus:ring-luxe-rose text-sm text-gray-800 shadow-xs"
                 autoFocus
               />
               <Search className="w-5 h-5 text-luxe-rose absolute left-4 top-4" />

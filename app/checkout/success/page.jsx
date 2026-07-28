@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { CheckCircle2, ShoppingBag, Package, Loader2, AlertCircle, ArrowRight } 
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
-export default function CheckoutSuccessPage() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const { clearCart } = useCart();
@@ -186,12 +186,12 @@ export default function CheckoutSuccessPage() {
           <strong className="text-emerald-600">Paid</strong>
         </p>
         <p>
-          Estimated Delivery: <strong>2 - 4 Business Days</strong>
+          Estimated Delivery: <strong>5 - 10 Business Days</strong>
         </p>
       </div>
 
       {order?.items && order.items.length > 0 && (
-        <div className="max-w-sm mx-auto bg-white rounded-2xl border border-gray-100 p-4 shadow-sm space-y-3">
+        <div className="max-w-sm mx-auto bg-white rounded-2xl border border-gray-100 p-4 shadow-xs space-y-3">
           <p className="text-xs font-bold text-gray-400 uppercase tracking-wider text-left">
             Order Items
           </p>
@@ -201,7 +201,7 @@ export default function CheckoutSuccessPage() {
               className="flex items-center gap-3 text-xs text-left"
             >
               {item.image && (
-                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -267,5 +267,20 @@ export default function CheckoutSuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-lg mx-auto px-4 py-24 text-center space-y-6">
+        <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+          <Loader2 className="w-10 h-10 animate-spin" />
+        </div>
+        <h1 className="font-serif text-3xl font-extrabold text-gray-900">Loading...</h1>
+      </div>
+    }>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }

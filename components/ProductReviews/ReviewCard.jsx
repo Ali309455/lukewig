@@ -26,7 +26,7 @@ export default function ReviewCard({ review }) {
     : "U";
 
   return (
-    <div className="bg-white rounded-2xl p-5 sm:p-6 border border-pink-100 shadow-xs hover:shadow-md transition-all space-y-3">
+    <div className="bg-white rounded-2xl p-5 sm:p-6 border border-pink-100 shadow-2xs hover:shadow-md transition-all space-y-3">
       {/* Top Header: User Profile & Rating */}
       <div className="flex items-start justify-between flex-wrap gap-2">
         <div className="flex items-center gap-3">

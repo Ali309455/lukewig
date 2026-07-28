@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { where, limit } from "firebase/firestore";
 import dbService from "@/services/DBService";
 
+export const dynamic = "force-dynamic";
+
 const ORDERS_COLLECTION = "orders";
 
 export async function GET(request) {

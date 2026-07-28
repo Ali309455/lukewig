@@ -64,16 +64,16 @@ export default function AnnouncementBar() {
   if (!sale) return null;
 
   return (
-    <div className="bg-gradient-to-r from-luxe-rose-soft via-pink-200 to-luxe-rose-soft text-luxe-dark text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 shadow-inner">
+    <div className="bg-linear-to-r from-luxe-rose-soft via-pink-200 to-luxe-rose-soft text-luxe-dark text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 shadow-inner">
       <Sparkles className="w-4 h-4 text-luxe-rose animate-pulse" />
       <span>{sale.bannerText || sale.title}</span>
       {sale.promoCode && (
-        <span className="hidden sm:inline ml-1 bg-white/70 px-2 py-0.5 rounded-full text-xs font-bold text-luxe-rose-dark shadow-sm">
+        <span className="hidden sm:inline ml-1 bg-white/70 px-2 py-0.5 rounded-full text-xs font-bold text-luxe-rose-dark shadow-xs">
           Use code <span className="uppercase">{sale.promoCode}</span> at checkout
         </span>
       )}
       {timeLeft && (
-        <div className="hidden md:flex items-center gap-1 ml-3 bg-white/70 px-2 py-0.5 rounded-full text-xs font-semibold text-luxe-rose-dark shadow-sm">
+        <div className="hidden md:flex items-center gap-1 ml-3 bg-white/70 px-2 py-0.5 rounded-full text-xs font-semibold text-luxe-rose-dark shadow-xs">
           <Timer className="w-3.5 h-3.5" />
           <span>
             {String(timeLeft.hours).padStart(2, "0")}:{String(timeLeft.minutes).padStart(2, "0")}:

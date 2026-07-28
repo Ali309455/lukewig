@@ -1,5 +1,3 @@
-import { checkDeliveredPurchase, MOCK_ORDERS } from "@/lib/mockOrders";
-
 /**
  * Review Permission Validator
  * Validates whether a user meets all 6 criteria to submit a product review.
@@ -16,10 +14,10 @@ import { checkDeliveredPurchase, MOCK_ORDERS } from "@/lib/mockOrders";
  * @param {Object|null} params.user - Current user object from AuthContext
  * @param {string} params.productId - ID of product being reviewed
  * @param {Array} params.existingReviews - Array of current reviews for this product
- * @param {Array} [params.orders] - Optional order history list
- * @returns {Object} { canReview: boolean, reason: string, code: string }
+ * @param {Function} params.checkDeliveredPurchase - Async function to check if user has delivered order
+ * @returns {Promise<Object>} { canReview: boolean, reason: string, code: string }
  */
-export function canUserReviewProduct({ user, productId, existingReviews = [], orders = MOCK_ORDERS }) {
+export async function canUserReviewProduct({ user, productId, existingReviews = [], checkDeliveredPurchase }) {
   // Condition 1, 2, 3: User logged in & authenticated
   if (!user || !user.uid) {
     return {
@@ -43,8 +41,9 @@ export function canUserReviewProduct({ user, productId, existingReviews = [], or
   }
 
   // Condition 4 & 5: Check if user has purchased the product and order status is "Delivered"
-  // For demo/mock environment: allow users who bought it in MOCK_ORDERS OR grant mock demo access for newly created sessions if they marked test purchase
-  const hasDeliveredOrder = checkDeliveredPurchase(user.uid, productId, orders);
+  const hasDeliveredOrder = checkDeliveredPurchase
+    ? await checkDeliveredPurchase(user.uid, productId)
+    : false;
 
   if (!hasDeliveredOrder) {
     return {

@@ -254,7 +254,6 @@ export async function POST(request) {
       totalAfterDiscount,
       total: finalTotal,
       paymentMethod: "stripe",
-      paymentStatus: "Unpaid",
       orderStatus: "Pending",
       promoCode: promoCode && promoCode.trim() ? promoCode.trim().toUpperCase() : null,
       appliedSaleId,

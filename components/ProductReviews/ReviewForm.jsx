@@ -42,7 +42,7 @@ export default function ReviewForm({ permissionStatus, onSubmitReview, productNa
   if (!canReview) {
     return (
       <div className="bg-pink-50/70 border border-pink-100 rounded-3xl p-6 sm:p-8 text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-luxe-rose/10 text-luxe-rose flex items-center justify-center mx-auto shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-luxe-rose/10 text-luxe-rose flex items-center justify-center mx-auto shadow-xs">
           {code === "NOT_LOGGED_IN" ? (
             <Lock className="w-6 h-6" />
           ) : (
@@ -83,14 +83,14 @@ export default function ReviewForm({ permissionStatus, onSubmitReview, productNa
 
       {successMsg ? (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm font-semibold flex items-center gap-2 animate-fade-in">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
           <span>{successMsg}</span>
         </div>
       ) : (
         <>
           {errorMsg && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-medium flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -119,7 +119,7 @@ export default function ReviewForm({ permissionStatus, onSubmitReview, productNa
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               placeholder="Tell us about the texture, lace melt, hair density, and styling versatility..."
-              className="w-full p-4 border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-luxe-rose text-sm text-gray-800 shadow-xs"
+              className="w-full p-4 border border-pink-200 rounded-2xl focus:outline-hidden focus:ring-2 focus:ring-luxe-rose text-sm text-gray-800 shadow-2xs"
               required
             />
           </div>
@@ -129,7 +129,7 @@ export default function ReviewForm({ permissionStatus, onSubmitReview, productNa
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-3 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-xs shadow-md hover:shadow-lg transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-luxe-rose disabled:opacity-50"
+              className="px-6 py-3 rounded-full bg-luxe-rose hover:bg-luxe-rose-dark text-white font-semibold text-xs shadow-md hover:shadow-lg transition-all flex items-center gap-2 focus:outline-hidden focus:ring-2 focus:ring-luxe-rose disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{submitting ? "Submitting..." : "Submit Verified Review"}</span>

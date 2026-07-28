@@ -10,7 +10,6 @@ import { ProductDetailsShimmer } from "@/components/common/LoadingShimmer";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductReviews from "@/components/ProductReviews/ProductReviews";
 import productService from "@/services/ProductService";
-import { INITIAL_PRODUCTS } from "@/lib/mockData";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -43,7 +42,7 @@ export default function ProductDetailPage() {
   }
 
   const currentVariant = product.sizes ? product.sizes[selectedVariantIndex] : { size: '20"', price: product.price, image: product.image };
-  const relatedProducts = INITIAL_PRODUCTS.filter((p) => p.id !== product.id);
+  const relatedProducts = [];
 
   return (
     <div className="py-10 space-y-12">
@@ -86,7 +85,7 @@ export default function ProductDetailPage() {
                 <button
                   key={idx}
                   onClick={() => setSelectedVariantIndex(idx)}
-                  className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                  className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                     selectedVariantIndex === idx
                       ? "border-luxe-rose shadow-md scale-105"
                       : "border-transparent opacity-60 hover:opacity-100"
@@ -126,9 +125,9 @@ export default function ProductDetailPage() {
             <span className="font-serif text-4xl font-bold text-luxe-rose">
               ${currentVariant.price}
             </span>
-            {product.originalPrice && (
+            {currentVariant.comparePrice > 0 && (
               <span className="text-lg text-gray-400 line-through">
-                ${product.originalPrice}
+                ${currentVariant.comparePrice}
               </span>
             )}
             {currentVariant.stock > 0 ? (
@@ -249,7 +248,7 @@ export default function ProductDetailPage() {
 
       {/* Product Details Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-pink-100 space-y-6">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-pink-100 space-y-6">
           <div className="flex border-b border-gray-100 space-x-8">
             <button
               onClick={() => setActiveTab("description")}

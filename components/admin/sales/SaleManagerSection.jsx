@@ -22,7 +22,7 @@ export default function SaleManagerSection({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Sale Form */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+      <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
         <h2 className="font-serif text-2xl font-bold text-gray-900 flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-luxe-rose" />
           {editingSale ? "Edit Sale Campaign" : "Create Sale Campaign"}
@@ -213,7 +213,7 @@ export default function SaleManagerSection({
 
       {/* Sale List */}
       <div className="space-y-4">
-        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-serif text-xl font-bold text-gray-900">All Campaigns</h3>
             <div className="relative w-48">
@@ -223,7 +223,7 @@ export default function SaleManagerSection({
                 placeholder="Search sales..."
                 value={searchTerm}
                 onChange={(e) => onSearch(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 border border-pink-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                className="w-full pl-8 pr-3 py-2 border border-pink-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
               />
             </div>
           </div>
@@ -237,7 +237,7 @@ export default function SaleManagerSection({
               {saleList.map((sale) => (
                 <div
                   key={sale.id}
-                  className="p-4 rounded-2xl border border-pink-100 bg-white hover:shadow-sm transition-shadow space-y-3"
+                  className="p-4 rounded-2xl border border-pink-100 bg-white hover:shadow-xs transition-shadow space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

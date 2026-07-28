@@ -36,7 +36,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 border border-pink-100/80 flex flex-col justify-between h-full relative overflow-hidden">
+    <div className="group bg-white rounded-2xl p-4 shadow-xs hover:shadow-xl transition-all duration-300 border border-pink-100/80 flex flex-col justify-between h-full relative overflow-hidden">
       
       {/* Sale / Discount Badge */}
       {product.isOnSale && (
@@ -49,14 +49,14 @@ export default function ProductCard({ product }) {
       <button
         type="button"
         onClick={handleWishlistToggle}
-        className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-luxe-rose hover:bg-white transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+        className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-luxe-rose hover:bg-white transition-all shadow-xs focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
       >
         <Heart className={`w-4 h-4 ${wishlisted ? "fill-luxe-rose text-luxe-rose" : ""}`} />
       </button>
 
       {/* Product Image Box - Perfectly Centered & Uniform Aspect Ratio */}
-      <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-xl overflow-hidden bg-pink-50/40 mb-4 flex items-center justify-center">
+      <div className="relative w-full aspect-square sm:aspect-4/3 rounded-xl overflow-hidden bg-pink-50/40 mb-4 flex items-center justify-center">
         <Image
           src={currentVariant.image || product.image}
           alt={product.name}
@@ -84,7 +84,7 @@ export default function ProductCard({ product }) {
         </span>
 
         <Link href={`/product/${product.id}`} className="hover:text-luxe-rose transition-colors">
-          <h3 className="font-serif text-lg sm:text-xl font-bold text-gray-900 leading-snug line-clamp-2 min-h-[3rem]">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-gray-900 leading-snug line-clamp-2 min-h-12">
             {product.name}
           </h3>
         </Link>
@@ -102,7 +102,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Variant Size Pills - Standardized Height */}
-        <div className="min-h-[2rem] flex items-center gap-1.5 mb-4 flex-wrap">
+        <div className="min-h-8 flex items-center gap-1.5 mb-4 flex-wrap">
           {product.sizes && product.sizes.length > 0 ? (
             <>
               <span className="text-[11px] text-gray-400 font-medium mr-0.5">Length:</span>
@@ -113,7 +113,7 @@ export default function ProductCard({ product }) {
                   onClick={() => setSelectedSizeIndex(idx)}
                   className={`text-[11px] px-2 py-0.5 rounded-md font-semibold border transition-all ${
                     selectedSizeIndex === idx
-                      ? "bg-luxe-rose text-white border-luxe-rose shadow-sm"
+                      ? "bg-luxe-rose text-white border-luxe-rose shadow-xs"
                       : "bg-gray-50 text-gray-600 border-gray-200 hover:border-luxe-rose"
                   }`}
                 >
@@ -137,9 +137,9 @@ export default function ProductCard({ product }) {
             <span className="font-serif text-2xl font-bold text-gray-900">
               ${currentVariant.price}
             </span>
-            {product.originalPrice && (
+            {currentVariant.comparePrice > 0 && (
               <span className="text-xs text-gray-400 line-through">
-                ${product.originalPrice}
+                ${currentVariant.comparePrice}
               </span>
             )}
           </div>
@@ -149,7 +149,7 @@ export default function ProductCard({ product }) {
           <button
             type="button"
             onClick={() => addToCart(product, currentVariant, 1, "product")}
-            className="px-4 py-2 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+            className="px-4 py-2 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Add</span>

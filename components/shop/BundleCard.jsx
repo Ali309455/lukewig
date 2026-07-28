@@ -25,7 +25,7 @@ export default function BundleCard({ bundle }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white via-pink-50/30 to-amber-50/30 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all border border-pink-200/60 relative flex flex-col justify-between">
+    <div className="bg-linear-to-br from-white via-pink-50/30 to-amber-50/30 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all border border-pink-200/60 relative flex flex-col justify-between">
       {bundle.popular && (
         <span className="absolute -top-3 left-6 bg-luxe-gold text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md tracking-wider uppercase">
           ★ BEST SELLER BUNDLE
@@ -50,7 +50,7 @@ export default function BundleCard({ bundle }) {
         <ul className="space-y-2 mb-6">
           {bundle.includes.map((item, idx) => (
             <li key={idx} className="flex items-center text-xs text-gray-600 gap-2">
-              <CheckCircle2 className="w-4 h-4 text-luxe-rose flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-luxe-rose shrink-0" />
               <span>{item}</span>
             </li>
           ))}

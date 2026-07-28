@@ -34,11 +34,11 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         
         {/* Brand Info */}
-        <div className="space-y-4 sm:col-span-2 md:col-span-1 text-center sm:text-left">
-          <div className="flex items-center justify-center mx-auto sm:mx-0 rounded-full bg-white/10 p-1.5 sm:p-2 border border-white/15 shadow-inner w-[4rem] h-[4rem] sm:w-[5rem] sm:h-[5rem] md:w-[5.5rem] md:h-[5.5rem] overflow-hidden">
+        <div className="space-y-4 text-center md:text-left">
+          <div className="flex items-center justify-center mx-auto sm:mx-0 rounded-full bg-white/10 p-1.5 sm:p-2 border border-white/15 shadow-inner w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 overflow-hidden">
             <Image
               src="/images/logo.png"
               alt="VERSATILE BY VERSHA' Logo"
@@ -67,8 +67,8 @@ export default function Footer() {
         </div>
 
         {/* Quick Links */}
-        <div>
-          <h4 className="font-serif text-xl font-bold text-white mb-4 border-b border-luxe-rose/40 pb-2 inline-block">Quick Links</h4>
+        <div className="flex flex-col justify-center items-center md:items-start w-full">
+          <h4 className="font-serif text-xl font-bold text-white mb-4 border-b border-luxe-rose/40 pb-2 inline-block ">Quick Links</h4>
           <ul className="space-y-2.5 text-sm text-gray-400">
             <li><Link href="/" className="hover:text-luxe-rose transition-colors">Home</Link></li>
             <li><Link href="/shop" className="hover:text-luxe-rose transition-colors">Shop All Wigs</Link></li>
@@ -78,34 +78,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Help & Support */}
-        <div>
-          <h4 className="font-serif text-xl font-bold text-white mb-4 border-b border-luxe-rose/40 pb-2 inline-block">Customer Care</h4>
-          <ul className="space-y-2.5 text-sm text-gray-400">
-            <li><a href="#" className="hover:text-luxe-rose transition-colors">Wig Care & Maintenance Guide</a></li>
-            <li><a href="#" className="hover:text-luxe-rose transition-colors">Shipping & Delivery Policy</a></li>
-            <li><a href="#" className="hover:text-luxe-rose transition-colors">Returns & Refunds</a></li>
-            <li><a href="#" className="hover:text-luxe-rose transition-colors">Lace Cap Size Guide</a></li>
-            <li><a href="#" className="hover:text-luxe-rose transition-colors">FAQs</a></li>
-          </ul>
-        </div>
 
-        {/* Newsletter Signup */}
-        <div>
-          <h4 className="font-serif text-xl font-bold text-white mb-4 border-b border-luxe-rose/40 pb-2 inline-block">Join Versatile VIP</h4>
-          <p className="text-gray-400 text-sm mb-3">Subscribe to unlock secret flash sales, product drops, and 15% off your first order!</p>
-          <div className="space-y-2">
-            <input
-              type="email"
-              placeholder="Enter your email address..."
-              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-luxe-rose"
-            />
-            <button className="w-full py-2.5 bg-luxe-rose hover:bg-luxe-rose-dark text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-luxe-gold" />
-              <span>Subscribe Now</span>
-            </button>
-          </div>
-        </div>
 
       </div>
 

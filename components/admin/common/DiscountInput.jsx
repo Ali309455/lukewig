@@ -40,7 +40,7 @@ export default function DiscountInput({ value, onChange, disabled }) {
           onChange={(e) => onChange(clamp(Number(e.target.value)))}
           onWheel={handleWheel}
           onKeyDown={handleKey}
-          className="w-full text-center px-3 py-2.5 border border-pink-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-luxe-rose disabled:opacity-40 disabled:bg-gray-50"
+          className="w-full text-center px-3 py-2.5 border border-pink-200 rounded-xl text-sm font-semibold focus:outline-hidden focus:ring-2 focus:ring-luxe-rose disabled:opacity-40 disabled:bg-gray-50"
         />
       </div>
 

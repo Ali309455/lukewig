@@ -41,8 +41,8 @@ export default function WishlistPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-6">
         <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto animate-pulse" />
-        <div className="h-8 bg-gray-200 rounded w-48 mx-auto animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded w-64 mx-auto animate-pulse" />
+        <div className="h-8 bg-gray-200 rounded-sm w-48 mx-auto animate-pulse" />
+        <div className="h-4 bg-gray-200 rounded-sm w-64 mx-auto animate-pulse" />
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function WishlistPage() {
         {wishlistItems.map((item) => (
           <div
             key={item.productId}
-            className="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 hover:shadow-lg transition-all group"
+            className="bg-white rounded-2xl p-4 shadow-xs border border-pink-100 hover:shadow-lg transition-all group"
           >
             <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-pink-50/40 mb-3">
               {item.image && (
@@ -103,7 +103,7 @@ export default function WishlistPage() {
               <button
                 type="button"
                 onClick={() => removeFromWishlist(item.productId)}
-                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-white transition-all shadow-sm"
+                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-white transition-all shadow-xs"
                 aria-label={`Remove ${item.name} from wishlist`}
               >
                 <Trash2 className="w-4 h-4" />
@@ -115,7 +115,7 @@ export default function WishlistPage() {
             </span>
 
             <Link href={`/product/${item.productId}`}>
-              <h3 className="font-serif text-base font-bold text-gray-900 leading-snug line-clamp-2 hover:text-luxe-rose transition-colors min-h-[2.5rem]">
+              <h3 className="font-serif text-base font-bold text-gray-900 leading-snug line-clamp-2 hover:text-luxe-rose transition-colors min-h-10">
                 {item.name}
               </h3>
             </Link>
@@ -135,7 +135,7 @@ export default function WishlistPage() {
                   };
                   addToCart(product, { size: '20"', price: item.price }, 1, "product");
                 }}
-                className="px-3 py-1.5 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark text-xs font-semibold shadow-sm transition-all flex items-center gap-1"
+                className="px-3 py-1.5 rounded-full bg-luxe-rose text-white hover:bg-luxe-rose-dark text-xs font-semibold shadow-xs transition-all flex items-center gap-1"
               >
                 <ShoppingBag className="w-3 h-3" />
                 <span>Add</span>

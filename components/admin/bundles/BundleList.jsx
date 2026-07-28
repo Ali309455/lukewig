@@ -12,7 +12,7 @@ export default function BundleList({
   onDelete,
 }) {
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+    <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="font-serif text-2xl font-bold text-gray-900">
           Active Bundles ({bundles.length})
@@ -24,7 +24,7 @@ export default function BundleList({
             placeholder="Search bundles…"
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
-            className="pl-8 pr-3.5 py-2 border border-pink-200 rounded-xl bg-white text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-luxe-rose transition-shadow placeholder:text-gray-300 w-44"
+            className="pl-8 pr-3.5 py-2 border border-pink-200 rounded-xl bg-white text-xs text-gray-800 focus:outline-hidden focus:ring-2 focus:ring-luxe-rose transition-shadow placeholder:text-gray-300 w-44"
           />
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function BundleList({
               key={b.id}
               className="p-4 bg-pink-50/50 rounded-2xl border border-pink-100 flex items-center gap-3"
             >
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-pink-100 flex-shrink-0 border border-pink-200">
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-pink-100 shrink-0 border border-pink-200">
                 {b.image ? (
                   <Image src={b.image} alt={b.title} fill className="object-cover" />
                 ) : (
@@ -69,7 +69,7 @@ export default function BundleList({
                     {b.title}
                   </h3>
                   {b.popular && (
-                    <span className="flex items-center gap-0.5 text-[9px] font-bold px-2 py-0.5 rounded-full bg-luxe-gold/10 text-luxe-gold border border-luxe-gold/20 flex-shrink-0">
+                    <span className="flex items-center gap-0.5 text-[9px] font-bold px-2 py-0.5 rounded-full bg-luxe-gold/10 text-luxe-gold border border-luxe-gold/20 shrink-0">
                       <Star className="w-2.5 h-2.5" />
                       Popular
                     </span>
@@ -89,7 +89,7 @@ export default function BundleList({
                   </p>
                 )}
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => onEdit(b)}
@@ -124,10 +124,10 @@ function BundleListSkeleton() {
           className="p-4 bg-pink-50/50 rounded-2xl border border-pink-100 flex justify-between items-center"
         >
           <div className="flex items-center gap-3 flex-1">
-            <div className="w-12 h-12 rounded-xl bg-pink-100 animate-pulse flex-shrink-0" />
+            <div className="w-12 h-12 rounded-xl bg-pink-100 animate-pulse shrink-0" />
             <div className="space-y-2 flex-1">
-              <div className="h-3.5 w-2/3 bg-pink-100 rounded animate-pulse" />
-              <div className="h-2.5 w-1/3 bg-pink-100 rounded animate-pulse" />
+              <div className="h-3.5 w-2/3 bg-pink-100 rounded-sm animate-pulse" />
+              <div className="h-2.5 w-1/3 bg-pink-100 rounded-sm animate-pulse" />
             </div>
           </div>
           <div className="flex gap-2 ml-4">

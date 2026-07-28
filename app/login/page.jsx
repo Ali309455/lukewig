@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, UserCheck, ShieldCheck, Sparkles } from "lucide-react";
+import { Lock, Mail, UserCheck, Eye, EyeOff } from "lucide-react";
 import { useAuth} from "@/context/AuthContext";
 
 export default function LoginPage() {
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,11 +22,7 @@ export default function LoginPage() {
     setError(null);
     try {
       await login(email, password);
-      if (email.toLowerCase().includes("admin")) {
-        router.push("/admin");
-      } else {
-        router.push("/shop");
-      }
+      router.push("/shop");
     } catch (err) {
       setError("Failed to sign in. Please check your credentials.");
       setLoading(false);
@@ -52,16 +49,8 @@ export default function LoginPage() {
     setLoading(false);
   }
 };
-  const handleDemoAdmin = async () => {
-    setEmail("admin@versatileByVersa.com");
-    setPassword("admin123");
-    setLoading(true);
-    await login("admin@versatileByVersa.com", "admin123");
-    router.push("/admin");
-  };
-
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 bg-gradient-to-br from-pink-50/40 via-white to-amber-50/40">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 bg-linear-to-br from-pink-50/40 via-white to-amber-50/40">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-pink-100/80 space-y-6 relative overflow-hidden">
         
         <div className="text-center space-y-2">
@@ -73,11 +62,11 @@ export default function LoginPage() {
   type="button"
   onClick={handleGoogleLogin}
   disabled={loading}
-  className="group flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-sm transition-all duration-300 hover:border-gray-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-luxe-rose focus:ring-offset-2 active:scale-[0.98]"
+  className="group flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-xs transition-all duration-300 hover:border-gray-400 hover:bg-gray-50 hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-luxe-rose focus:ring-offset-2 active:scale-[0.98]"
 >
   {/* Google Logo */}
   <svg
-    className="h-5 w-5 flex-shrink-0"
+    className="h-5 w-5 shrink-0"
     viewBox="0 0 48 48"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -120,7 +109,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
               />
               <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
             </div>
@@ -131,13 +120,21 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 required
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                className="w-full pl-10 pr-11 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
               />
               <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -157,22 +154,12 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Demo Admin Quick Button */}
-        <div className="pt-2 border-t border-gray-100 text-center space-y-3">
-          <button
-            onClick={handleDemoAdmin}
-            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-luxe-rose/10 via-amber-50 to-luxe-rose/10 text-luxe-rose border border-luxe-rose/30 text-xs font-bold hover:bg-luxe-rose hover:text-white transition-all flex items-center justify-center gap-2 shadow-sm"
-          >
-            <ShieldCheck className="w-4 h-4 text-luxe-gold" />
-            <span>Click for Quick Demo Admin Login</span>
-          </button>
-          <p className="text-xs text-gray-500">
-            Don't have an account?{" "}
-            <Link href="/signup" className="text-luxe-rose font-semibold hover:underline">
-              Create Account
-            </Link>
-          </p>
-        </div>
+        <p className="text-xs text-gray-500 text-center pt-2">
+          Don't have an account?{" "}
+          <Link href="/signup" className="text-luxe-rose font-semibold hover:underline">
+            Create Account
+          </Link>
+        </p>
 
       </div>
     </div>

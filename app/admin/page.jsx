@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ShieldCheck,
   PlusCircle,
@@ -13,13 +14,16 @@ import {
   AlertCircle,
   Search,
   Tag,
+  ShoppingBag,
+  Gift,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import productService from "@/services/ProductService";
 import bundleService from "@/services/BundleService";
 import saleService from "@/services/SaleService";
 import orderService, { ORDER_STATUSES } from "@/services/OrderService";
-import { SIZE_KEYS, calcDiscountedPrice } from "@/components/admin/common/constants";
+import { calcDiscountedPrice } from "@/components/admin/common/constants";
 import ProductForm from "@/components/admin/products/ProductForm";
 import ProductCatalogList from "@/components/admin/products/ProductCatalogList";
 import BundleForm from "@/components/admin/bundles/BundleForm";
@@ -37,7 +41,7 @@ const EMPTY_FORM = {
   price: "",
   isOnSale: false,
   discountPercent: 0,
-  sizes: SIZE_KEYS.map((size) => ({ size, price: "", stock: "" })),
+  sizes: [],
   details: { hairType: "", density: "", capSize: "", laceType: "" },
   images: [],
 };
@@ -69,7 +73,8 @@ const EMPTY_BUNDLE_FORM = {
 };
 
 export default function AdminDashboardPage() {
-  const { user } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("products");
 
   // Products state
@@ -171,6 +176,44 @@ export default function AdminDashboardPage() {
     if (activeTab === "orders") loadOrders();
   }, [activeTab, loadOrders]);
 
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      router.replace("/");
+    }
+  }, [authLoading, isAdmin, router]);
+
+  if (authLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="space-y-4 animate-pulse">
+          <div className="h-6 w-48 bg-pink-100 rounded-sm" />
+          <div className="h-10 w-72 bg-pink-100 rounded-sm" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white p-5 rounded-3xl border border-pink-100 space-y-3">
+                <div className="h-3 w-20 bg-pink-100 rounded-sm" />
+                <div className="h-8 w-24 bg-pink-100 rounded-sm" />
+                <div className="h-3 w-32 bg-pink-100 rounded-sm" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <h1 className="font-serif text-3xl font-bold text-gray-900">Access Denied</h1>
+        <p className="mt-2 text-sm text-gray-500">You do not have permission to view this page.</p>
+        <Link href="/" className="mt-6 inline-block px-6 py-3 rounded-full bg-luxe-rose text-white text-sm font-bold hover:bg-luxe-rose/90 transition-all">
+          Go Home
+        </Link>
+      </div>
+    );
+  }
+
   // Product handlers
   const resetProductForm = () => {
     setForm(EMPTY_FORM);
@@ -193,6 +236,7 @@ export default function AdminDashboardPage() {
       sizes: f.sizes.map((s) => ({
         size: s.size,
         price: parseFloat(s.price) || 0,
+        comparePrice: parseFloat(s.comparePrice) || 0,
         stock: parseInt(s.stock) || 0,
       })),
       details: { ...f.details },
@@ -233,10 +277,9 @@ export default function AdminDashboardPage() {
       price: product.price || "",
       isOnSale: product.isOnSale ?? false,
       discountPercent: product.discountPercent ?? 0,
-      sizes: SIZE_KEYS.map((sz) => {
-        const match = product.sizes?.find((s) => s.size === sz);
-        return { size: sz, price: match?.price ?? "", stock: match?.stock ?? "" };
-      }),
+      sizes: product.sizes?.length > 0
+        ? product.sizes.map((s) => ({ size: s.size, price: s.price ?? "", comparePrice: s.comparePrice ?? "", stock: s.stock ?? "" }))
+        : [],
       details: {
         hairType: product.details?.hairType || "",
         density: product.details?.density || "",
@@ -509,17 +552,18 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const TabBtn = ({ id, label }) => (
+  const TabBtn = ({ id, icon, label }) => (
     <button
       type="button"
       onClick={() => setActiveTab(id)}
-      className={`pb-3 px-5 font-serif text-xl font-bold border-b-2 transition-all ${
+      className={`pb-3 px-4 sm:px-5 border-b-2 transition-all ${
         activeTab === id
-          ? "border-luxe-rose text-luxe-rose text-2xl"
+          ? "border-luxe-rose text-luxe-rose"
           : "border-transparent text-gray-400 hover:text-gray-700"
       }`}
+      title={label}
     >
-      {label}
+      <span className="flex items-center justify-center">{icon}</span>
     </button>
   );
 
@@ -534,9 +578,9 @@ export default function AdminDashboardPage() {
           }`}
         >
           {notification.type === "error" ? (
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0" />
           ) : (
-            <CheckCircle className="w-4 h-4 flex-shrink-0" />
+            <CheckCircle className="w-4 h-4 shrink-0" />
           )}
           <span>{notification.msg}</span>
         </div>
@@ -545,17 +589,15 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-pink-100 pb-6 gap-4">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-3">
-            <div className="relative w-36 h-10">
-              <Image src="/images/logo.svg" alt="VERSATILE BY VERSHA'" width={140} height={40} className="object-contain" />
-            </div>
+            
             <span className="px-3 py-1 rounded-full bg-luxe-rose/10 text-luxe-rose text-xs font-bold border border-luxe-rose/20 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5" />
               Admin Management Dashboard
             </span>
           </div>
-          <h1 className="font-serif text-3xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="font-serif text-2xl font-extrabold text-gray-900 tracking-tight">
             VERSATILE BY VERSHA&apos;{" "}
-            <span className="text-luxe-gold font-normal text-xl">| Store Management</span>
+            <span className="text-luxe-gold font-normal text-xl pl-2">| Store Management</span>
           </h1>
           <p className="text-xs text-gray-500 font-medium">
             Logged in as: <strong className="text-gray-900 font-bold">{user?.email || "Admin"}</strong>
@@ -563,7 +605,7 @@ export default function AdminDashboardPage() {
         </div>
         <Link
           href="/shop"
-          className="px-5 py-2.5 rounded-full border border-pink-200 text-xs font-bold text-gray-700 hover:bg-luxe-rose hover:text-white hover:border-luxe-rose transition-all shadow-xs whitespace-nowrap"
+          className="px-5 py-2.5 rounded-full border border-pink-200 text-xs font-bold text-gray-700 hover:bg-luxe-rose hover:text-white hover:border-luxe-rose transition-all shadow-2xs whitespace-nowrap"
         >
           View Store Front →
         </Link>
@@ -571,12 +613,12 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: "Total Sales", value: "$24,850", sub: "+18.4% this month", icon: <DollarSign className="w-5 h-5 text-emerald-500" />, valueClass: "text-gray-900" },
+          { label: "Total Sales", value: `$${orderList.reduce((sum, o) => sum + (o.total || o.totalAmount || 0), 0).toLocaleString()}`, sub: `${orderList.length} Orders Processed`, icon: <DollarSign className="w-5 h-5 text-emerald-500" />, valueClass: "text-gray-900" },
           { label: "Products", value: productList.length, sub: "Catalog Items", icon: <Package className="w-5 h-5 text-luxe-rose" />, valueClass: "text-gray-900" },
           { label: "Active Sale", value: (saleList.find((s) => s.active)?.discountPercent || "No") + "% OFF", sub: saleList.filter((s) => s.active).length + " Active Campaigns", icon: <Tag className="w-5 h-5 text-luxe-gold" />, valueClass: "text-luxe-rose" },
           { label: "Bundle Deals", value: bundleList.length, sub: "Active Packages", icon: <Package className="w-5 h-5 text-indigo-500" />, valueClass: "text-gray-900" },
         ].map(({ label, value, sub, icon, valueClass }) => (
-          <div key={label} className="bg-white p-5 rounded-3xl shadow-sm border border-pink-100 space-y-2">
+          <div key={label} className="bg-white p-5 rounded-3xl shadow-xs border border-pink-100 space-y-2">
             <div className="flex items-center justify-between text-gray-400">
               <span className="text-[10px] font-bold uppercase tracking-wider">{label}</span>
               {icon}
@@ -590,11 +632,11 @@ export default function AdminDashboardPage() {
         ))}
       </div>
 
-      <div className="flex space-x-2 sm:space-x-4 border-b border-pink-100 overflow-x-auto">
-        <TabBtn id="orders" label="Orders" />
-        <TabBtn id="products" label="Product Manager" />
-        <TabBtn id="sales" label="Launch Sales" />
-        <TabBtn id="bundles" label="Create Bundles" />
+      <div className="flex items-center justify-around sm:justify-start gap-2 sm:gap-6 border-b border-pink-100">
+        <TabBtn id="orders" icon={<ClipboardList className="w-5 h-5 sm:w-6 sm:h-6" />} label="Orders" />
+        <TabBtn id="products" icon={<Package className="w-5 h-5 sm:w-6 sm:h-6" />} label="Product Manager" />
+        <TabBtn id="sales" icon={<Tag className="w-5 h-5 sm:w-6 sm:h-6" />} label="Launch Sales" />
+        <TabBtn id="bundles" icon={<Gift className="w-5 h-5 sm:w-6 sm:h-6" />} label="Create Bundles" />
       </div>
 
       {activeTab === "orders" && (
@@ -611,10 +653,10 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           <div
             id="product-form-card"
-            className="lg:col-span-2 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4"
+            className="lg:col-span-2 bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4"
           >
             <h2 className="font-serif text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <PlusCircle className="w-5 h-5 text-luxe-rose flex-shrink-0" />
+              <PlusCircle className="w-5 h-5 text-luxe-rose shrink-0" />
               {editingProduct ? "Edit Product" : "Add New Product"}
             </h2>
 
@@ -671,10 +713,10 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div
             id="bundle-form-card"
-            className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4"
+            className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4"
           >
             <h2 className="font-serif text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Package className="w-5 h-5 text-luxe-gold flex-shrink-0" />
+              <Package className="w-5 h-5 text-luxe-gold shrink-0" />
               {editingBundle ? "Edit Bundle" : "Create Bundle Package"}
             </h2>
 

@@ -258,7 +258,7 @@ export default function CheckoutPage() {
             Payment Method: <strong>Cash on Delivery</strong>
           </p>
           <p>
-            Estimated Delivery: <strong>2 - 4 Business Days</strong>
+            Estimated Delivery: <strong>5 - 10 Business Days</strong>
           </p>
         </div>
         <Link
@@ -291,7 +291,7 @@ export default function CheckoutPage() {
         className="grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
             <h3 className="font-serif text-2xl font-bold text-gray-900 flex items-center gap-2">
               <Truck className="w-5 h-5 text-luxe-rose" />
               <span>Shipping Information</span>
@@ -308,7 +308,7 @@ export default function CheckoutPage() {
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="Jane"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
               <div>
@@ -321,7 +321,7 @@ export default function CheckoutPage() {
                   value={formData.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="jane@example.com"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
               <div>
@@ -352,7 +352,7 @@ export default function CheckoutPage() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function CheckoutPage() {
                 value={formData.address}
                 onChange={handleChange}
                 placeholder="123 Luxury Ave, Suite 400"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
               />
             </div>
 
@@ -382,7 +382,7 @@ export default function CheckoutPage() {
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="New York"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
               <div>
@@ -395,13 +395,13 @@ export default function CheckoutPage() {
                   value={formData.zip}
                   onChange={handleChange}
                   placeholder="10001"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xs border border-pink-100 space-y-4">
             <h3 className="font-serif text-2xl font-bold text-gray-900 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-luxe-gold" />
               <span>Payment Option</span>
@@ -413,7 +413,7 @@ export default function CheckoutPage() {
                 onClick={() => setPaymentMethod("stripe")}
                 className={`p-4 rounded-2xl border text-left flex items-center gap-3 transition-all ${
                   paymentMethod === "stripe"
-                    ? "border-luxe-rose bg-pink-50/50 shadow-sm"
+                    ? "border-luxe-rose bg-pink-50/50 shadow-xs"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
                 onClick={() => setPaymentMethod("cod")}
                 className={`p-4 rounded-2xl border text-left flex items-center gap-3 transition-all ${
                   paymentMethod === "cod"
-                    ? "border-luxe-rose bg-pink-50/50 shadow-sm"
+                    ? "border-luxe-rose bg-pink-50/50 shadow-xs"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -472,7 +472,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-pink-100 space-y-6 sticky top-28">
+          <div className="bg-white p-6 rounded-3xl shadow-xs border border-pink-100 space-y-6 sticky top-28">
             <h3 className="font-serif text-2xl font-bold text-gray-900 border-b border-gray-100 pb-3">
               Order Items ({cartItems.length})
             </h3>
@@ -484,7 +484,7 @@ export default function CheckoutPage() {
                   className="flex justify-between items-center pt-2 text-xs"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
                       <Image
                         src={item.image}
                         alt={item.name}
@@ -540,7 +540,7 @@ export default function CheckoutPage() {
                     placeholder="Enter promo code"
                     value={promoInput}
                     onChange={(e) => setPromoInput(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-luxe-rose"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs uppercase focus:outline-hidden focus:ring-2 focus:ring-luxe-rose"
                   />
                   <button
                     type="submit"
@@ -592,14 +592,14 @@ export default function CheckoutPage() {
 
             {errorMsg && (
               <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl">
-                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
                 <p className="text-xs text-red-700 font-medium">{errorMsg}</p>
               </div>
             )}
 
             {!stripeAvailable && (
               <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
-                <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                 <p className="text-xs text-amber-700 font-medium">
                   Card payments are currently unavailable. Please use Cash on
                   Delivery.
