@@ -104,7 +104,7 @@ export default function AdminOrderCard({ order, updating, onStatusChange }) {
   }, [order.id]);
 
   return (
-    <div className="bg-white rounded-2xl border border-pink-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+    <div className="bg-white rounded-2xl border border-pink-100 shadow-sm hover:shadow-md transition-all duration-200 ">
       {/* Header */}
       <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-pink-100 bg-gradient-to-r from-pink-50/30 to-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

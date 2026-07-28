@@ -15,10 +15,10 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="space-y-16 py-12">
+    <div className=" ">
       
       {/* Meet the Owner Hero */}
-      <section className="bg-linear-to-br from-[#fff8f9] via-luxe-rose-light to-luxe-bg py-16 sm:py-20 border-b border-pink-100
+      <section className="bg-linear-to-br from-[#fff8f9] via-luxe-rose-light to-luxe-bg pt-16 sm:py-20 border-b border-pink-100
       relative w-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('/images/aboutbgimage.png')",
