@@ -61,7 +61,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/15 to-black/35" />
 
         {/* Content */}
-        <div className="relative z-10 flex min-h-[125vh] flex-col items-center justify-center gap-6 px-4 py-12 sm:gap-10">
+        <div className="relative z-10 flex min-h-[125vh] flex-col items-center justify-items-start gap-6 px-4 py-12 sm:gap-10">
           <h1 className="text-center">
             <span className="block font-serif text-4xl font-bold leading-tight text-white text-shadow-hero sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               Crown Your
