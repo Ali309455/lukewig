@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError(null);
     try {
       await login(email, password);
-      router.push("/shop");
+      router.push("/");
     } catch (err) {
       setError("Failed to sign in. Please check your credentials.");
       setLoading(false);
@@ -40,7 +40,7 @@ export default function LoginPage() {
     if (user?.role === "admin") {
       router.push("/admin");
     } else {
-      router.push("/shop");
+      router.push("/");
     }
   } catch (err) {
     console.error(err);

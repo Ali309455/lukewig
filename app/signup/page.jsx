@@ -21,7 +21,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signup(name, email, password);
-      router.push("/shop");
+      router.push("/");
     } catch (err) {
       setLoading(false);
     }

@@ -8,6 +8,7 @@ import { ShoppingBag, Search, Heart, User, Menu, X, ShieldCheck, LogOut, Sparkle
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useWishlist } from "@/context/WishlistContext";
+import SearchBar from "./SearchBar";
 
 // Active Link helper isolated inside Suspense
 function NavLink({ href, children, className, activeClassName }) {
@@ -342,35 +343,8 @@ function NavbarContent() {
         </div>
       )}
 
-      {/* Quick Search Modal */}
       {searchOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-start justify-center pt-20 px-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl relative animate-fade-in border border-pink-100">
-            <button
-              type="button"
-              onClick={() => setSearchOpen(false)}
-              className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-              Search VERSATILE Collection
-            </h3>
-            <p className="text-xs text-gray-500 mb-6">
-              Find silky straight, body wave, deep wave, or HD lace closures.
-            </p>
-
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Type to search wigs & extensions..."
-                className="w-full pl-12 pr-4 py-3.5 border border-pink-200 rounded-2xl focus:outline-hidden focus:ring-2 focus:ring-luxe-rose text-sm text-gray-800 shadow-xs"
-                autoFocus
-              />
-              <Search className="w-5 h-5 text-luxe-rose absolute left-4 top-4" />
-            </div>
-          </div>
-        </div>
+        <SearchBar onClose={() => setSearchOpen(false)} />
       )}
     </>
   );

@@ -57,7 +57,7 @@ export function CartProvider({ children }) {
     setNotification(msg);
     setTimeout(() => {
       setNotification(null);
-    }, 3000);
+    }, 3500);
   };
 
   const addToCart = (product, sizeVariant, quantity = 1, itemType = "product") => {
