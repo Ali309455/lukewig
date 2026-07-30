@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/shop/ProductCard";
 import BundleCard from "@/components/shop/BundleCard";
@@ -9,7 +9,7 @@ import { SlidersHorizontal, X } from "lucide-react";
 import productService from "@/services/ProductService";
 import bundleService from "@/services/BundleService";
 
-export default function ShopPage() {
+function ShopPageContent() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -428,5 +428,13 @@ export default function ShopPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={<ProductGridShimmer count={6} />}>
+      <ShopPageContent />
+    </Suspense>
   );
 }
