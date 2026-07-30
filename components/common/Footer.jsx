@@ -86,9 +86,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500">
         <p>© {new Date().getFullYear()} VERSATILE BY VERSHA'. All Rights Reserved.</p>
         <div className="flex space-x-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-gray-300">Privacy Policy</a>
-          <a href="#" className="hover:text-gray-300">Terms of Service</a>
-          <a href="#" className="hover:text-gray-300">Cookie Settings</a>
+          <Link href="/privacy-policy" className="hover:text-gray-300">Privacy Policy</Link>
+          <Link href="/terms-of-service" className="hover:text-gray-300">Terms of Service</Link>
+          <Link href="/privacy-policy#cookies" className="hover:text-gray-300">Cookie Settings</Link>
         </div>
       </div>
     </footer>

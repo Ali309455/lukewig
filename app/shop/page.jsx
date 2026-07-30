@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/shop/ProductCard";
 import BundleCard from "@/components/shop/BundleCard";
 import { ProductGridShimmer } from "@/components/common/LoadingShimmer";
@@ -9,6 +10,7 @@ import productService from "@/services/ProductService";
 import bundleService from "@/services/BundleService";
 
 export default function ShopPage() {
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [bundles, setBundles] = useState([]);
@@ -21,14 +23,17 @@ export default function ShopPage() {
   const drawerRef = useRef(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get("category");
+    const categoryParam = searchParams.get("category");
     if (categoryParam === "bundles") {
       setViewMode("bundles");
     } else if (["Straight Wigs", "Wave Wigs", "Curly Wigs", "Colored Wigs", "HD Laces & Closures"].includes(categoryParam)) {
       setSelectedCategory(categoryParam);
+      setViewMode("all");
+    } else {
+      setViewMode("all");
+      setSelectedCategory("All");
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const loadData = async () => {

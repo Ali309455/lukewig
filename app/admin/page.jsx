@@ -170,7 +170,8 @@ export default function AdminDashboardPage() {
     loadProducts();
     loadBundles();
     loadSales();
-  }, [loadProducts, loadBundles, loadSales]);
+    loadOrders();
+  }, [loadProducts, loadBundles, loadSales, loadOrders]);
 
   useEffect(() => {
     if (activeTab === "orders") loadOrders();
